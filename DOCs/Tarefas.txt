@@ -1,0 +1,8 @@
+Requisitos Funcionais e Não Funcionais
+
+C4 Model
+	Contexto Sistema Diagram 1 - ( Primeiro Desenho)
+	Container Diagram 2 - ( Segundo Desenho)
+
+Diagrama de Casos de Usos
+Diagrama de Sequencia
