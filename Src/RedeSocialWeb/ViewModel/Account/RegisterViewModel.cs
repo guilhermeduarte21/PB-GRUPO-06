@@ -11,6 +11,8 @@ namespace RedeSocialWeb.ViewModel.Account
     {
         [Required]
         public String Name { get; set; }
+        [Required]
+        public String SobreNome { get; set; }
 
         [Required]
         public string UserName { get; set; }

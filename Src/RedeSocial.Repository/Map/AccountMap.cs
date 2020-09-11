@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RedeSocial.Domain.Account;
+using RedeSocial.Domain.Profile;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -11,18 +13,17 @@ namespace RedeSocial.Repository.Map
     {
         public void Configure(EntityTypeBuilder<Domain.Account.Account> builder)
         {
-            builder.ToTable("Account");
+            builder.ToTable("Accounts");
 
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
+            builder.HasKey(x => x.ID);
+            builder.Property(x => x.ID).IsRequired().ValueGeneratedOnAdd();
 
             builder.Property(x => x.Email).IsRequired().HasMaxLength(250);
-            builder.Property(x => x.Name).IsRequired().HasMaxLength(150);
             builder.Property(x => x.Password).IsRequired().HasMaxLength(150);
-            builder.Property(x => x.DtBirthday).IsRequired();
             builder.Property(x => x.UserName).HasMaxLength(50);
 
-            builder.HasOne(x => x.Role).WithMany(x => x.Accounts);
+            builder.HasOne<Perfil>(x => x.ID_Perfil);
+            builder.HasOne<Role>(x => x.ID_Role);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RedeSocial.Domain.Account;
+using RedeSocial.Domain.Profile;
 using RedeSocial.Repository.Account;
 using RedeSocial.Services.Account;
 using RedeSocialWeb.ViewModel.Account;
@@ -85,11 +86,15 @@ namespace RedeSocialWeb.Controllers
                 {
                     var user = new Account
                     {
-                        Name = model.Name,
                         UserName = model.UserName,
                         Email = model.Email,
-                        DtBirthday = model.DtBirthday,
-                        Password = model.Password
+                        Password = model.Password,
+                        ID_Perfil = new Perfil
+                        {
+                            Nome = model.Name,
+                            SobreNome = model.SobreNome,
+                            DataNascimento = model.DtBirthday
+                        }
                     };
                     var result = await AccountService.CreateAsync(user, default);
 

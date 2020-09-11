@@ -12,9 +12,11 @@ namespace RedeSocial.Repository.Map
         public void Configure(EntityTypeBuilder<Role> builder)
         {
             builder.ToTable("Role");
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
+            builder.HasKey(x => x.ID);
+            builder.Property(x => x.ID).IsRequired().ValueGeneratedOnAdd();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
+
+            builder.HasMany<RedeSocial.Domain.Account.Account>(x => x.IDs_Accounts).WithOne(x => x.ID_Role);
         }
     }
 }

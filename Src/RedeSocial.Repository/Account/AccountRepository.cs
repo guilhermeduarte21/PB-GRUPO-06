@@ -39,12 +39,7 @@ namespace RedeSocial.Repository.Account
 
         public Task<Domain.Account.Account> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return this.Context.Accounts.FirstOrDefaultAsync(x => x.Id == new Guid(userId));
-        }
-
-        public Task<Domain.Account.Account> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
-        {
-            return this.Context.Accounts.FirstOrDefaultAsync(x => x.Name == normalizedUserName);
+            return this.Context.Accounts.FirstOrDefaultAsync(x => x.ID == new Guid(userId));
         }
 
         public Task<Domain.Account.Account> FindByUserNameAsync(string UserName, CancellationToken cancellationToken)
@@ -57,19 +52,24 @@ namespace RedeSocial.Repository.Account
             return this.Context.Accounts.FirstOrDefaultAsync(x => x.Email == Email);
         }
 
-        public Task<string> GetNormalizedUserNameAsync(Domain.Account.Account user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.Name);
-        }
-
         public Task<string> GetUserIdAsync(Domain.Account.Account user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.Id.ToString());
+            return Task.FromResult(user.ID.ToString());
         }
 
         public Task<string> GetUserNameAsync(Domain.Account.Account user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.UserName);
+        }
+
+        public Task<string> GetNormalizedUserNameAsync(Domain.Account.Account user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.UserName);
+        }
+
+        public Task<Domain.Account.Account> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        {
+            return this.Context.Accounts.FirstOrDefaultAsync(x => x.UserName == normalizedUserName);
         }
 
         public Task SetNormalizedUserNameAsync(Domain.Account.Account user, string normalizedName, CancellationToken cancellationToken)
@@ -86,7 +86,7 @@ namespace RedeSocial.Repository.Account
 
         public async Task<IdentityResult> UpdateAsync(Domain.Account.Account user, CancellationToken cancellationToken)
         {
-            var accountToUpdate = await this.Context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.Id == user.Id);
+            var accountToUpdate = await this.Context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.ID == user.ID);
             accountToUpdate = user;
             this.Context.Entry(accountToUpdate).State = EntityState.Modified;
             this.Context.Accounts.Add(accountToUpdate);
@@ -98,14 +98,14 @@ namespace RedeSocial.Repository.Account
         public Task<Domain.Account.Account> GetAccountByEmailPassword(string email, string password)
         {
             return Task.FromResult(this.Context.Accounts
-                                                .Include(x => x.Role)
+                                                .Include(x => x.ID_Role)
                                                 .FirstOrDefault(x => x.Email == email && x.Password == password));
         }
 
         public Task<Domain.Account.Account> GetAccountByUserNamePassword(string userName, string password)
         {
             return Task.FromResult(this.Context.Accounts
-                                                .Include(x => x.Role)
+                                                .Include(x => x.ID_Role)
                                                 .FirstOrDefault(x => x.UserName == userName && x.Password == password));
         }
 

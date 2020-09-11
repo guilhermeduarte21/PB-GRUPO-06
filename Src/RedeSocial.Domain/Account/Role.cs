@@ -6,9 +6,9 @@ namespace RedeSocial.Domain.Account
 {
     public class Role
     {
-        public Guid Id { get; set; }
+        public Guid ID { get; set; }
         public string Name { get; set; }
 
-        public List<Account> Accounts { get; set; }
+        public virtual IList<Account> IDs_Accounts { get; set; } //UMA ROLE TEM MUITAS CONTAS | UMA CONTA SO PODE TER UMA ROLE (1 : M)
     }
 }
