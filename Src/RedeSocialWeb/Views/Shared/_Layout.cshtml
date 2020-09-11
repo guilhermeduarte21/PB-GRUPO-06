@@ -1,54 +1,77 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@ViewData["Title"] - RedeSocialWeb</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css">
 </head>
 <body>
     @if (this.User.Identity.IsAuthenticated)
     {
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Rede Social</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="col-md-3 col-lg-2 mr-0 px-3" asp-action="Index">
+                <img src="https://travelpedia.com.br/wp-content/uploads/2018/09/alface-icon.png" width="40" height="40" alt="" loading="lazy">
+            </a>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" asp-action="Index" asp-controller="Home">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-action="Privacy" asp-controller="Home">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-action="Report" asp-controller="Home">Relatórios</a>
-                        </li>
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link" asp-action="Logout">Sign out</a>
+                </li>
+            </ul>
+        </nav>
 
-                    </ul>
-                    <div class="navbar-text">
-                        <img class="img-profile rounded-circle" src="https://robohash.org/@(this.User.Claims.First(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value)?size=30x30&bgset=bg1">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">@this.User.Identity.Name?.ToLower()</span>
+        <div class="container-fluid">
+            <div class="row">
+                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                    <div class="sidebar-sticky pt-3">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Home">Pàgina Inicial</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Privacy" asp-controller="Home">Notificações</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="#" asp-controller="Home">Mensagens</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="#" asp-controller="Home">Itens salvos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="#" asp-controller="Home">Perfil</a>
+                            </li>
+                        </ul>
+
+                        <div class="navbar-text fixed-bottom ml-3 mb-1">
+                            <img class="img-profile rounded-circle" src="https://robohash.org/@(this.User.Claims.First(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value)?size=30x30&bgset=bg1">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">@this.User.Identity.Name?.ToLower()</span>
+                        </div>
                     </div>
-                </div>
-            </nav>
-        </header>
+                </nav>
+
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                    <div class="container">
+                        <main role="main">
+                            @RenderBody()
+                        </main>
+                    </div>
+                </main>
+            </div>
+        </div>
     }
+    else
+    {
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
+    }
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - RedeSocialWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

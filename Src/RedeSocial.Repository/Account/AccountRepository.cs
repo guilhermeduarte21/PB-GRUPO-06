@@ -47,6 +47,16 @@ namespace RedeSocial.Repository.Account
             return this.Context.Accounts.FirstOrDefaultAsync(x => x.Name == normalizedUserName);
         }
 
+        public Task<Domain.Account.Account> FindByUserNameAsync(string UserName, CancellationToken cancellationToken)
+        {
+            return this.Context.Accounts.FirstOrDefaultAsync(x => x.UserName == UserName);
+        }
+
+        public Task<Domain.Account.Account> FindByEmailAsync(string Email, CancellationToken cancellationToken)
+        {
+            return this.Context.Accounts.FirstOrDefaultAsync(x => x.Email == Email);
+        }
+
         public Task<string> GetNormalizedUserNameAsync(Domain.Account.Account user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.Name);
@@ -113,13 +123,6 @@ namespace RedeSocial.Repository.Account
                 disposedValue = true;
             }
         }
-
-        // // Tarefa pendente: substituir o finalizador somente se 'Dispose(bool disposing)' tiver o código para liberar recursos não gerenciados
-        // ~AccountRepository()
-        // {
-        //     // Não altere este código. Coloque o código de limpeza no método 'Dispose(bool disposing)'
-        //     Dispose(disposing: false);
-        // }
 
         public void Dispose()
         {

@@ -7,8 +7,11 @@ using System.Text;
 
 namespace RedeSocial.Repository.Context
 {
+    //Utiliza para buscar os dados no banco de dados
     public class RedeSocialContext : DbContext
     {
+        //Busca os dados no banco de dados
+        //Db set é uma proprieda do Entity Framework que controla toda a Interface do banco de dados, faz a interface das Query para o Banco de Dados
         public DbSet<Domain.Account.Account> Accounts { get; set; }
         public DbSet<Domain.Account.Role> Profiles { get; set; }
 

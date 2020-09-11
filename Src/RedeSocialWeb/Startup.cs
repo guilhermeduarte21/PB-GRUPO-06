@@ -17,6 +17,7 @@ using RedeSocial.Domain.Account.Repository;
 using RedeSocial.Repository.Account;
 using RedeSocial.Services.Account;
 using RedeSocial.Repository.Context;
+using RedeSocialWeb.ViewModel.Account;
 
 namespace RedeSocialWeb
 {
@@ -32,11 +33,13 @@ namespace RedeSocialWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IAccountIdentityManager, AccountIdentityManager>();
+
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IUserStore<Account>, AccountRepository>();
+
             services.AddTransient<IRoleStore<Role>, RoleRepository>();
-            services.AddTransient<IAccountIdentityManager, AccountIdentityManager>();
-            services.AddTransient<IAccountService, AccountService>();
 
             services.AddDbContext<RedeSocialContext>(opt =>
             {
@@ -45,6 +48,27 @@ namespace RedeSocialWeb
 
             services.AddIdentity<Account, Role>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
 
             services.ConfigureApplicationCookie(options =>
             {

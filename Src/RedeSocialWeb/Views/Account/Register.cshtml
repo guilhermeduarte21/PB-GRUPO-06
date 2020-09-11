@@ -1,57 +1,54 @@
-﻿@model RedeSocialWeb.Models.RegisterViewModel
+﻿@model RedeSocialWeb.ViewModel.Account.RegisterViewModel
 
 @{
     ViewData["Title"] = "Register";
 }
 
-<h1>Register</h1>
+<link rel="stylesheet" href="~/css/signin.css" />
 
-<h4>RegisterViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Register">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DtBirthday" class="control-label"></label>
-                <input asp-for="DtBirthday" class="form-control" />
-                <span asp-validation-for="DtBirthday" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="text-center">
+    <form class="form-signin" asp-action="Register" asp-controller="Account" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <img class="mb-4" src="https://travelpedia.com.br/wp-content/uploads/2018/09/alface-icon.png" alt="" width="72" height="72" />
+        <h1 class="h3 mb-3 font-weight-normal">Criar sua conta</h1>
+
+        <div class="form-group">
+            <label asp-for="Name" class="sr-only">Nome</label>
+            <input type="text" asp-for="Name" class="form-control" placeholder="Nome" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UserName" class="sr-only">Nome de Usuario</label>
+            <input type="text" asp-for="UserName" class="form-control" placeholder="Nome de Usuario" required />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="sr-only">Email</label>
+            <input type="email" asp-for="Email" class="form-control" placeholder="Email" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DtBirthday" class="sr-only">Data de Nascimento</label>
+            <input type="date" asp-for="DtBirthday" class="form-control" placeholder="Data de Nascimento" required />
+            <span asp-validation-for="DtBirthday" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="sr-only">Senha</label>
+            <input type="password" asp-for="Password" class="form-control" placeholder="Senha" required />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ConfirmPassword" class="sr-only">Confirmar Senha</label>
+            <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Confirmar Senha" required />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" value="Create">Cadastrar</button>
+
+        <p>Realizar <a asp-action="Login">Login</a></p>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Login">Voltar para o login</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -1,25 +1,29 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Login Page";
 }
 
 @model RedeSocialWeb.ViewModel.Account.LoginViewModel
 
+<link rel="stylesheet" href="~/css/signin.css" />
+
 <div class="text-center">
-    <h1 class="display-4">Login na Rede Social de Horta</h1>
+    <form class="form-signin" asp-action="Login" asp-controller="Account" method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
+        <img class="mb-4" src="https://travelpedia.com.br/wp-content/uploads/2018/09/alface-icon.png" alt="" width="150" height="150" />
+
+        <h1 class="h3 mb-3 font-weight-normal">Face Horta</h1>
+
+        <label for="UserName" class="sr-only">UserName ou Email</label>
+        <input type="text" asp-for="UserName" class="form-control" placeholder="UserName ou Email" required autofocus />
+
+        <label for="Password" class="sr-only">Senha</label>
+        <input type="password" asp-for="Password" class="form-control" placeholder="Senha" required />
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+        <p>Não tem conta? <a asp-action="Register">Cadastre-se</a></p>
+        <div asp-validation-summary="All" class="text-danger mt-5 mb-3"></div>
+    </form>
 </div>
 
-<div asp-validation-summary="All" class="text-danger"></div>
-<form asp-action="Login" asp-controller="Account" method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
-    <div class="form-group">
-        <label asp-for="UserName">UserName</label>
-        <input type="text" asp-for="UserName" class="form-control" placeholder="UserName">
-    </div>
-    <div class="form-group">
-        <label asp-for="Password">Senha</label>
-        <input type="password" asp-for="Password" class="form-control" placeholder="Senha">
-    </div>
-    <button type="submit" class="btn btn-primary">Entrar</button>
-</form>
-<div>
-    <a asp-action="Register">Cadastrar</a>
-</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
