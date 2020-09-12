@@ -7,23 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RedeSocial.Domain.Account;
 using RedeSocial.Domain.Profile;
-using RedeSocial.Repository.Account;
-using RedeSocial.Services.Account;
-using RedeSocialWeb.ViewModel.Account;
+using RedeSocial.API.Controllers;
+using RedeSocial.Web.ViewModel.Account;
+using RedeSocial.API.ViewModel;
+using Newtonsoft.Json;
+using RestSharp;
 
-namespace RedeSocialWeb.Controllers
+namespace RedeSocial.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private IAccountService AccountService { get; set; }
-        private IAccountIdentityManager AccountIdentityManager { get; set; }
-
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAccountService accountService, IAccountIdentityManager accountIdentityManager, ILogger<AccountController> logger)
+        public AccountController(ILogger<AccountController> logger)
         {
-            this.AccountService = accountService;
-            this.AccountIdentityManager = accountIdentityManager;
             _logger = logger;
         }
 
@@ -32,23 +29,25 @@ namespace RedeSocialWeb.Controllers
             return View();
         }
 
-        public IActionResult Login(string returnUrl = "")
+        public async Task<IActionResult> Login(string returnUrl = "")
         {
             ViewBag.ReturnUrl = returnUrl;
-            if (this.User.Identity.IsAuthenticated)
-                AccountIdentityManager.Logout();
 
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginRequest model, string returnUrl)
         {
             try
             {
-                var result = await this.AccountIdentityManager.Login(model.UserName, model.Password);
+                var client = new RestClient();
+                var request = new RestRequest("https://localhost:5001/api/Autenticar/login", DataFormat.Json);
+                request.AddJsonBody(model);
 
-                if (!result.Succeeded)
+                var response = client.Post<Account>(request);
+
+                if (response == null)
                 {
                     ModelState.AddModelError(string.Empty, "Login ou senha inválidos");
                     return View(model);
@@ -68,11 +67,8 @@ namespace RedeSocialWeb.Controllers
 
         //GET: Account/Register
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
-            if (this.User.Identity.IsAuthenticated)
-                AccountIdentityManager.Logout();
-
             return View();
         }
 
@@ -96,9 +92,14 @@ namespace RedeSocialWeb.Controllers
                             DataNascimento = model.DtBirthday
                         }
                     };
-                    var result = await AccountService.CreateAsync(user, default);
 
-                    if (result.Succeeded)
+                    var client = new RestClient();
+                    var request = new RestRequest("https://localhost:5001/api/aluno", DataFormat.Json);
+                    request.AddJsonBody(user);
+
+                    var response = client.Post<Account>(request);
+
+                    if (response != null)
                     {
                         _logger.LogInformation("Cadastrado com sucesso!");
                         return View(nameof(Success));
@@ -126,10 +127,12 @@ namespace RedeSocialWeb.Controllers
         }
 
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            if (this.User.Identity.IsAuthenticated)
-                AccountIdentityManager.Logout();
+            var client = new RestClient();
+            var request = new RestRequest("https://localhost:5001/api/conta/logout", Method.GET);
+
+            request.RequestFormat = DataFormat.Json;
 
             return View();
         }

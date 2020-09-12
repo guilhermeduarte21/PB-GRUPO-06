@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace RedeSocialWeb
+namespace RedeSocial.Web
 {
     public class Program
     {

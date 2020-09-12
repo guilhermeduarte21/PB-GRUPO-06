@@ -17,9 +17,9 @@ using RedeSocial.Domain.Account.Repository;
 using RedeSocial.Repository.Account;
 using RedeSocial.Services.Account;
 using RedeSocial.Repository.Context;
-using RedeSocialWeb.ViewModel.Account;
+using RedeSocial.Web.ViewModel.Account;
 
-namespace RedeSocialWeb
+namespace RedeSocial.Web
 {
     public class Startup
     {

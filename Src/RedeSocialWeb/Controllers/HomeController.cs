@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RedeSocial.Services.Account;
-using RedeSocialWeb.Models;
+using RedeSocial.Web.Models;
 
-namespace RedeSocialWeb.Controllers
+namespace RedeSocial.Web.Controllers
 {
     [Authorize]
     public class HomeController : Controller

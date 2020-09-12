@@ -1,6 +1,6 @@
 using System;
 
-namespace RedeSocialWeb.Models
+namespace RedeSocial.Web.Models
 {
     public class ErrorViewModel
     {
