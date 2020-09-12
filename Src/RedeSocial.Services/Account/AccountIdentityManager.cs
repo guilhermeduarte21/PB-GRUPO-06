@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using RedeSocial.CrossCutting.RegexExemple;
 using RedeSocial.Domain.Account.Repository;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace RedeSocial.Services.Account
     {
         private IAccountRepository Repository { get; set; }
         private SignInManager<Domain.Account.Account> SignInManager { get; set; }
+        Domain.Account.Account account;
 
         public AccountIdentityManager(IAccountRepository accountRepository, SignInManager<Domain.Account.Account> signInManager)
         {
@@ -21,7 +23,14 @@ namespace RedeSocial.Services.Account
 
         public async Task<SignInResult> Login(string userName, string password)
         {
-            var account = await this.Repository.GetAccountByUserNamePassword(userName, password);
+            if (RegexUtilities.IsValidEmail(userName))
+            {
+                account = await this.Repository.GetAccountByEmailPassword(userName, password);
+            }
+            else
+            {
+                account = await this.Repository.GetAccountByUserNamePassword(userName, password);
+            }
 
             if(account == null)
             {

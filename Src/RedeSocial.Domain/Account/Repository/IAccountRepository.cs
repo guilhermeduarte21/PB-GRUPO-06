@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,5 +24,6 @@ namespace RedeSocial.Domain.Account.Repository
         Task<IdentityResult> UpdateAsync(Account user, CancellationToken cancellationToken);
         Task<Account> GetAccountByEmailPassword(string email, string password);
         Task<Account> GetAccountByUserNamePassword(string userName, string password);
+        Task<ActionResult<IEnumerable<Domain.Account.Account>>> GetAccountsAsync();
     }
 }

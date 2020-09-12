@@ -44,6 +44,7 @@ namespace RedeSocial.Repository.Context
         }
     }
 
+    /*
     public class BloggingContextFactory : IDesignTimeDbContextFactory<RedeSocialContext>
     {
         public RedeSocialContext CreateDbContext(string[] args)
@@ -54,4 +55,5 @@ namespace RedeSocial.Repository.Context
             return new RedeSocialContext(optionsBuilder.Options);
         }
     }
+    */
 }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RedeSocialWeb.ViewModel.Account
 {
     public class LoginViewModel
     {
-        public String UserName { get; set; }
-        public String Password { get; set; }
+        [Required(ErrorMessage = "UserName/Email é um campo obrigátorio")]
+        public string UserName { get; set; }
+
+        [Required(ErrorMessage = "Password é um campo obrigátorio")]
+        public string Password { get; set; }
     }
 }

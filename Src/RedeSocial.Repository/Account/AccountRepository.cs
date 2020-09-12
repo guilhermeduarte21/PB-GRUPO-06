@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedeSocial.Domain.Account.Repository;
 using RedeSocial.Repository.Context;
@@ -129,6 +130,11 @@ namespace RedeSocial.Repository.Account
             // Não altere este código. Coloque o código de limpeza no método 'Dispose(bool disposing)'
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<ActionResult<IEnumerable<Domain.Account.Account>>> GetAccountsAsync()
+        {
+           return await this.Context.Accounts.ToListAsync();
         }
     }
 }
