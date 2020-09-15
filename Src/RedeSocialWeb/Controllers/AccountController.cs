@@ -7,21 +7,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RedeSocial.Domain.Account;
 using RedeSocial.Domain.Profile;
-using RedeSocial.API.Controllers;
 using RedeSocial.Web.ViewModel.Account;
-using RedeSocial.API.ViewModel;
-using Newtonsoft.Json;
-using RestSharp;
+using RedeSocial.Web.ApiServices.Account;
+using RedeSocial.Domain.ViewModel;
+using RedeSocial.Services.Account;
 
 namespace RedeSocial.Web.Controllers
 {
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
+        private readonly IAccountApi _accountApi;
+        private readonly IAccountIdentityManager _accountIdentityManager;
 
-        public AccountController(ILogger<AccountController> logger)
+        public AccountController(ILogger<AccountController> logger, IAccountApi accountApi, IAccountIdentityManager accountIdentityManager)
         {
             _logger = logger;
+            _accountApi = accountApi;
+            _accountIdentityManager = accountIdentityManager;
         }
 
         public IActionResult Index()
@@ -29,7 +32,7 @@ namespace RedeSocial.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Login(string returnUrl = "")
+        public IActionResult Login(string returnUrl = "")
         {
             ViewBag.ReturnUrl = returnUrl;
 
@@ -37,17 +40,22 @@ namespace RedeSocial.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest model, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             try
             {
-                var client = new RestClient();
-                var request = new RestRequest("https://localhost:5001/api/Autenticar/login", DataFormat.Json);
-                request.AddJsonBody(model);
+                var user = new LoginRequest
+                {
+                    UserName = model.UserName,
+                    Password = model.Password,
+                };
+                //Services
+                var result = await _accountIdentityManager.Login(user.UserName, user.Password);
 
-                var response = client.Post<Account>(request);
+                //Api
+                //var result  = await _accountApi.LoginAsync(user);
 
-                if (response == null)
+                if (result == null)
                 {
                     ModelState.AddModelError(string.Empty, "Login ou senha inválidos");
                     return View(model);
@@ -67,7 +75,7 @@ namespace RedeSocial.Web.Controllers
 
         //GET: Account/Register
         [HttpGet]
-        public async Task<IActionResult> Register()
+        public IActionResult Register()
         {
             return View();
         }
@@ -93,13 +101,9 @@ namespace RedeSocial.Web.Controllers
                         }
                     };
 
-                    var client = new RestClient();
-                    var request = new RestRequest("https://localhost:5001/api/aluno", DataFormat.Json);
-                    request.AddJsonBody(user);
+                    var response = await _accountApi.CreateAsync(user);
 
-                    var response = client.Post<Account>(request);
-
-                    if (response != null)
+                    if (response.Succeeded)
                     {
                         _logger.LogInformation("Cadastrado com sucesso!");
                         return View(nameof(Success));
@@ -129,10 +133,7 @@ namespace RedeSocial.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            var client = new RestClient();
-            var request = new RestRequest("https://localhost:5001/api/conta/logout", Method.GET);
-
-            request.RequestFormat = DataFormat.Json;
+            await _accountApi.Logout();
 
             return View();
         }

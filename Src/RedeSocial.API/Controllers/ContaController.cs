@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedeSocial.Domain.Account;
-using RedeSocial.Repository.Context;
+using RedeSocial.Domain.ViewModel;
 using RedeSocial.Services.Account;
 
 namespace RedeSocial.API.Controllers
@@ -17,13 +15,29 @@ namespace RedeSocial.API.Controllers
     [ApiController]
     public class ContaController : ControllerBase
     {
-        private IAccountService AccountService { get; set; }
-        private IAccountIdentityManager AccountIdentityManager { get; set; }
+        private readonly IAccountService AccountService;
+        private readonly IAccountIdentityManager _accountIdentityManager;
 
         public ContaController(IAccountService accountService, IAccountIdentityManager accountIdentityManager)
         {
             this.AccountService = accountService;
-            this.AccountIdentityManager = accountIdentityManager;
+            this._accountIdentityManager = accountIdentityManager;
+        }
+
+        [AllowAnonymous]
+        [Route("Login")]
+        [HttpPost]
+        public async Task<IActionResult> AuthenticateAsync(LoginRequest model)
+        {
+            if (!ModelState.IsValid)
+                return await Task.FromResult(BadRequest(ModelState));
+
+            var response = await _accountIdentityManager.Login(model.UserName, model.Password);
+
+            if (response == null)
+                return BadRequest(new { message = "Login ou senha Inválidos" });
+
+            return Ok();
         }
 
         // GET: api/Conta
@@ -78,6 +92,7 @@ namespace RedeSocial.API.Controllers
 
         // POST: api/Conta
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
             await AccountService.CreateAsync(account, default);
@@ -104,7 +119,7 @@ namespace RedeSocial.API.Controllers
         [HttpGet]
         public async Task Logout()
         {
-            await this.AccountIdentityManager.Logout();
+            await this._accountIdentityManager.Logout();
         }
 
         private bool AccountExists(Guid id)

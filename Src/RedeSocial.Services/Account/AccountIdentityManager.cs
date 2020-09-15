@@ -13,6 +13,7 @@ namespace RedeSocial.Services.Account
     {
         private IAccountRepository Repository { get; set; }
         private SignInManager<Domain.Account.Account> SignInManager { get; set; }
+
         Domain.Account.Account account;
 
         public AccountIdentityManager(IAccountRepository accountRepository, SignInManager<Domain.Account.Account> signInManager)
