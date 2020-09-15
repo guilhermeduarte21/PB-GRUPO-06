@@ -12,10 +12,12 @@ namespace RedeSocial.Services.Account
     public class AccountService : IAccountService
     {
         private IAccountRepository AccountRepository { get; set; }
+        private IRoleStore<RedeSocial.Domain.Account.Role> RoleRepository { get; set; }
 
-        public AccountService(IAccountRepository accountRepository)
+        public AccountService(IAccountRepository accountRepository, IRoleStore<RedeSocial.Domain.Account.Role> roleRepository)
         {
             this.AccountRepository = accountRepository;
+            this.RoleRepository = roleRepository;
         }
 
         async Task<IdentityResult> IAccountService.CreateAsync(Domain.Account.Account user, CancellationToken cancellationToken)
@@ -23,9 +25,15 @@ namespace RedeSocial.Services.Account
             var userName = await this.AccountRepository.FindByUserNameAsync(user.UserName, default);
             var userEmail = await this.AccountRepository.FindByEmailAsync(user.Email, default);
 
-            if (userName == null && userEmail == null)
+            var role = this.RoleRepository.FindByNameAsync("USUARIO", default);
+
+            if (userName == null && userEmail == null && role != null)
             {
+                user.ID_Role = role.Result;               
+
                 await this.AccountRepository.CreateAsync(user, cancellationToken);
+
+                role.Result.IDs_Accounts.Add(user);
                 return IdentityResult.Success;
             }
             else

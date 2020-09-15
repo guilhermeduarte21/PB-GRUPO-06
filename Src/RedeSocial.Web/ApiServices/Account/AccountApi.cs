@@ -28,7 +28,7 @@ namespace RedeSocial.Web.ApiServices.Account
 
             var conteudo = new StringContent(userJson, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/conta", conteudo);
+            var response = await _httpClient.PostAsync("api/accounts", conteudo);
 
             if (response.IsSuccessStatusCode)
             {
@@ -44,7 +44,7 @@ namespace RedeSocial.Web.ApiServices.Account
 
             var conteudo = new StringContent(loginRequestJson, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/conta/login", conteudo);
+            var response = await _httpClient.PostAsync("api/accounts/login", conteudo);
 
             if (response.IsSuccessStatusCode)
             {

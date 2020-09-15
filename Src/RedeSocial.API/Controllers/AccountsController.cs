@@ -13,12 +13,12 @@ namespace RedeSocial.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ContaController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         private readonly IAccountService AccountService;
         private readonly IAccountIdentityManager _accountIdentityManager;
 
-        public ContaController(IAccountService accountService, IAccountIdentityManager accountIdentityManager)
+        public AccountsController(IAccountService accountService, IAccountIdentityManager accountIdentityManager)
         {
             this.AccountService = accountService;
             this._accountIdentityManager = accountIdentityManager;
@@ -97,7 +97,7 @@ namespace RedeSocial.API.Controllers
         {
             await AccountService.CreateAsync(account, default);
 
-            return CreatedAtAction("GetAccount", new { id = account.ID }, account);
+            return CreatedAtAction("GetAccount", new { id = account.ID });
         }
 
         // DELETE: api/Conta/5
