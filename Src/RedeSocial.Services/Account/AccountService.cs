@@ -54,6 +54,7 @@ namespace RedeSocial.Services.Account
 
         public async Task<Domain.Account.Account> FindByUserNameAsync(string UserName, CancellationToken cancellationToken)
         {
+            var account = await AccountRepository.FindByUserNameAsync(UserName, cancellationToken);
             return await AccountRepository.FindByUserNameAsync(UserName, cancellationToken);
         }
 

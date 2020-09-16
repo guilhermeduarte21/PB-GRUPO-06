@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using RedeSocial.Domain.Profile;
+using RedeSocial.Domain.Account;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,7 +22,7 @@ namespace RedeSocial.Domain.Post
         Task<IdentityResult> UpdateAsync(Postagem user, CancellationToken cancellationToken);
         Task<string> GetDescricaoAsync(Postagem user, CancellationToken cancellationToken);
         Task<string> GetFotoPostUrlAsync(Postagem user, CancellationToken cancellationToken);
-        Task<Perfil> GetID_PerfilAsync(Postagem user, CancellationToken cancellationToken);
+        Task<Account.Account> GetID_AccountAsync(Postagem user, CancellationToken cancellationToken);
         Task<IList<Comentario>> GetIDs_ComentariosAsync(Postagem user, CancellationToken cancellationToken);
     }
 }

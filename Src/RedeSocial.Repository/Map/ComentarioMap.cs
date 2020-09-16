@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RedeSocial.Domain.Post;
-using RedeSocial.Domain.Profile;
+using RedeSocial.Domain.Account;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +19,7 @@ namespace RedeSocial.Repository.Map
 
             builder.Property(x => x.Descricao);
 
-            builder.HasOne<Perfil>(x => x.ID_Perfil);
+            builder.HasOne<Domain.Account.Account>(x => x.ID_Account);
             builder.HasOne<Postagem>(x => x.ID_Postagem);
         }
     }

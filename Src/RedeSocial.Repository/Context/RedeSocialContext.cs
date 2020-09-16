@@ -15,7 +15,6 @@ namespace RedeSocial.Repository.Context
         //Db set é uma proprieda do Entity Framework que controla toda a Interface do banco de dados, faz a interface das Query para o Banco de Dados
         public DbSet<Domain.Account.Account> Accounts { get; set; }
         public DbSet<Domain.Account.Role> Roles { get; set; }
-        public DbSet<Domain.Profile.Perfil> Perfis { get; set; }
         public DbSet<Domain.Post.Postagem> Postagens { get; set; }
         public DbSet<Domain.Post.Comentario> Comentarios { get; set; }
 
@@ -36,7 +35,6 @@ namespace RedeSocial.Repository.Context
         {
             modelBuilder.ApplyConfiguration(new AccountMap());
             modelBuilder.ApplyConfiguration(new RoleMap());
-            modelBuilder.ApplyConfiguration(new PerfilMap());
             modelBuilder.ApplyConfiguration(new PostagemMap());
             modelBuilder.ApplyConfiguration(new ComentarioMap());
 
@@ -50,7 +48,7 @@ namespace RedeSocial.Repository.Context
         public RedeSocialContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<RedeSocialContext>();
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=RedeSocial;Trusted_Connection=True;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=RedeSocial;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
 
             return new RedeSocialContext(optionsBuilder.Options);
         }

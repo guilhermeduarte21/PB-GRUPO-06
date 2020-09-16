@@ -1,5 +1,4 @@
 ﻿using RedeSocial.Domain.Account;
-using RedeSocial.Domain.Profile;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,7 +12,7 @@ namespace RedeSocial.Domain.Post
         public DateTime DataPostagem { get; set; }
         public string FotoPostUrl { get; set; }
 
-        public virtual Perfil ID_Perfil { get; set; } //UMA POSTAGEM TEM UM PERFIL (QUEM POSTOU)
-        public virtual IList<Comentario> IDs_Comentarios { get; set; } //UMA POSTAGEM TEM MUITOS COMENTARIOS
+        public virtual Account.Account ID_Account { get; set; } //UMA POSTAGEM TEM UM PERFIL (QUEM POSTOU)
+        public virtual IList<Comentario> IDs_Comentarios { get; set; } = new List<Comentario>(); //UMA POSTAGEM TEM MUITOS COMENTARIOS
     }
 }

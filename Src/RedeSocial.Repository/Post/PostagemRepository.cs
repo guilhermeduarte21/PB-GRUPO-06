@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RedeSocial.Domain.Post;
-using RedeSocial.Domain.Profile;
+using RedeSocial.Domain.Account;
 using RedeSocial.Repository.Context;
 using System;
 using System.Collections.Generic;
@@ -96,9 +96,9 @@ namespace RedeSocial.Repository.Post
             return await Task.FromResult(user.FotoPostUrl);
         }
 
-        public async Task<Perfil> GetID_PerfilAsync(Postagem user, CancellationToken cancellationToken)
+        public async Task<Domain.Account.Account> GetID_AccountAsync(Postagem user, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(user.ID_Perfil);
+            return await Task.FromResult(user.ID_Account);
         }
 
         public async Task<IList<Comentario>> GetIDs_ComentariosAsync(Postagem user, CancellationToken cancellationToken)

@@ -25,18 +25,37 @@ namespace RedeSocial.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("AccountID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AccountID1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DataNascimento")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<Guid?>("ID_PerfilID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("FotoPerfilUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ID_RoleID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("SobreNome")
                         .IsRequired()
                         .HasColumnType("nvarchar(150)")
                         .HasMaxLength(150);
@@ -47,7 +66,9 @@ namespace RedeSocial.Repository.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ID_PerfilID");
+                    b.HasIndex("AccountID");
+
+                    b.HasIndex("AccountID1");
 
                     b.HasIndex("ID_RoleID");
 
@@ -79,7 +100,7 @@ namespace RedeSocial.Repository.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ID_PerfilID")
+                    b.Property<Guid?>("ID_AccountID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ID_PostagemID")
@@ -87,7 +108,7 @@ namespace RedeSocial.Repository.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ID_PerfilID");
+                    b.HasIndex("ID_AccountID");
 
                     b.HasIndex("ID_PostagemID");
 
@@ -110,58 +131,25 @@ namespace RedeSocial.Repository.Migrations
                     b.Property<string>("FotoPostUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ID_PerfilID")
+                    b.Property<Guid?>("ID_AccountID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ID_PerfilID");
+                    b.HasIndex("ID_AccountID");
 
-                    b.ToTable("Portagens");
-                });
-
-            modelBuilder.Entity("RedeSocial.Domain.Profile.Perfil", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DataNascimento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FotoPerfilUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.Property<Guid?>("PerfilID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("PerfilID1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("SobreNome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PerfilID");
-
-                    b.HasIndex("PerfilID1");
-
-                    b.ToTable("Perfis");
+                    b.ToTable("Postagens");
                 });
 
             modelBuilder.Entity("RedeSocial.Domain.Account.Account", b =>
                 {
-                    b.HasOne("RedeSocial.Domain.Profile.Perfil", "ID_Perfil")
-                        .WithMany()
-                        .HasForeignKey("ID_PerfilID");
+                    b.HasOne("RedeSocial.Domain.Account.Account", null)
+                        .WithMany("IDs_Seguidores")
+                        .HasForeignKey("AccountID");
+
+                    b.HasOne("RedeSocial.Domain.Account.Account", null)
+                        .WithMany("IDs_Seguindo")
+                        .HasForeignKey("AccountID1");
 
                     b.HasOne("RedeSocial.Domain.Account.Role", "ID_Role")
                         .WithMany("IDs_Accounts")
@@ -170,9 +158,9 @@ namespace RedeSocial.Repository.Migrations
 
             modelBuilder.Entity("RedeSocial.Domain.Post.Comentario", b =>
                 {
-                    b.HasOne("RedeSocial.Domain.Profile.Perfil", "ID_Perfil")
+                    b.HasOne("RedeSocial.Domain.Account.Account", "ID_Account")
                         .WithMany()
-                        .HasForeignKey("ID_PerfilID");
+                        .HasForeignKey("ID_AccountID");
 
                     b.HasOne("RedeSocial.Domain.Post.Postagem", "ID_Postagem")
                         .WithMany("IDs_Comentarios")
@@ -181,20 +169,9 @@ namespace RedeSocial.Repository.Migrations
 
             modelBuilder.Entity("RedeSocial.Domain.Post.Postagem", b =>
                 {
-                    b.HasOne("RedeSocial.Domain.Profile.Perfil", "ID_Perfil")
+                    b.HasOne("RedeSocial.Domain.Account.Account", "ID_Account")
                         .WithMany("IDs_Postagens")
-                        .HasForeignKey("ID_PerfilID");
-                });
-
-            modelBuilder.Entity("RedeSocial.Domain.Profile.Perfil", b =>
-                {
-                    b.HasOne("RedeSocial.Domain.Profile.Perfil", null)
-                        .WithMany("IDs_Seguidores")
-                        .HasForeignKey("PerfilID");
-
-                    b.HasOne("RedeSocial.Domain.Profile.Perfil", null)
-                        .WithMany("IDs_Seguindo")
-                        .HasForeignKey("PerfilID1");
+                        .HasForeignKey("ID_AccountID");
                 });
 #pragma warning restore 612, 618
         }

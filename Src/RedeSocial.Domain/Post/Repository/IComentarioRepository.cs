@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using RedeSocial.Domain.Profile;
+using RedeSocial.Domain.Account;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +21,7 @@ namespace RedeSocial.Domain.Post
         Task SetUserNameAsync(Comentario user, string userName, CancellationToken cancellationToken);
         Task<IdentityResult> UpdateAsync(Comentario user, CancellationToken cancellationToken);
         Task<string> GetDescricaoAsync(Comentario user, CancellationToken cancellationToken);
-        Task<Perfil> GetID_PerfilAsync(Comentario user, CancellationToken cancellationToken);
+        Task<Account.Account> GetID_AccountAsync(Comentario user, CancellationToken cancellationToken);
         Task<Postagem> GetID_PostagemAsync(Comentario user, CancellationToken cancellationToken);
     }
 }

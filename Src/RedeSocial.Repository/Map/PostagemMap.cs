@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RedeSocial.Domain.Post;
-using RedeSocial.Domain.Profile;
+using RedeSocial.Domain.Account;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +12,7 @@ namespace RedeSocial.Repository.Map
     {
         public void Configure(EntityTypeBuilder<Postagem> builder)
         {
-            builder.ToTable("Portagens");
+            builder.ToTable("Postagens");
 
             builder.HasKey(x => x.ID);
             builder.Property(x => x.ID).IsRequired().ValueGeneratedOnAdd();
@@ -21,7 +21,7 @@ namespace RedeSocial.Repository.Map
             builder.Property(x => x.Descricao).IsRequired();
             builder.Property(x => x.DataPostagem).IsRequired();
 
-            builder.HasOne<Perfil>(x => x.ID_Perfil);
+            builder.HasOne<Domain.Account.Account>(x => x.ID_Account);
             builder.HasMany<Comentario>(x => x.IDs_Comentarios);
         }
     }
