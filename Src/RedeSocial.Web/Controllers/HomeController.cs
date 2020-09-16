@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RedeSocial.Services.Account;
+using RedeSocial.Web.ApiServices.Account;
 using RedeSocial.Web.Models;
 
 namespace RedeSocial.Web.Controllers
@@ -14,13 +16,16 @@ namespace RedeSocial.Web.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private IAccountIdentityManager AccountIdentityManager { get; set; }
+        private readonly IAccountApi _accountApi;
         private readonly ILogger<HomeController> _logger;
+        private readonly IAccountIdentityManager _accountIdentityManager;
+        public string UserName => this.User.Identity.Name;
 
-        public HomeController(ILogger<HomeController> logger, IAccountIdentityManager accountIdentityManager)
+        public HomeController(ILogger<HomeController> logger, IAccountApi accountApi, IAccountIdentityManager accountIdentityManager)
         {
             _logger = logger;
-            this.AccountIdentityManager = accountIdentityManager;
+            _accountApi = accountApi;
+            _accountIdentityManager = accountIdentityManager;
         }
 
         public IActionResult Index()
@@ -39,11 +44,20 @@ namespace RedeSocial.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        public async Task<ActionResult> Perfil()
+        {
+            var response = await _accountApi.FindByUserNameAsync(UserName);
+
+            if (response == null)
+                return RedirectToAction(nameof(Logout));
+
+            return View(response);
+        }
+
         [HttpGet]
         public IActionResult Logout()
         {
-            if (this.User.Identity.IsAuthenticated)
-                AccountIdentityManager.Logout();
+            _accountIdentityManager.Logout();
 
             return Redirect("/");
         }

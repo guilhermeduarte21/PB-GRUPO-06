@@ -53,7 +53,8 @@ namespace RedeSocial.Web.Controllers
                 var result = await _accountIdentityManager.Login(user.UserName, user.Password);
 
                 //Api
-                //var result  = await _accountApi.LoginAsync(user);
+                //var result  = _accountApi.LoginAsync(user);
+
 
                 if (result == null)
                 {

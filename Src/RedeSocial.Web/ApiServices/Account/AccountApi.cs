@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RedeSocial.Domain.ViewModel;
+using RedeSocial.Web.ViewModel.Account;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -19,7 +21,7 @@ namespace RedeSocial.Web.ApiServices.Account
         {
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.BaseAddress = new Uri("https://localhost:5001/");
+            _httpClient.BaseAddress = new Uri("https://localhost:5001/api/");
         }
 
         public async Task<IdentityResult> CreateAsync(Domain.Account.Account user)
@@ -28,7 +30,7 @@ namespace RedeSocial.Web.ApiServices.Account
 
             var conteudo = new StringContent(userJson, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/accounts", conteudo);
+            var response = await _httpClient.PostAsync("accounts", conteudo);
 
             if (response.IsSuccessStatusCode)
             {
@@ -38,25 +40,51 @@ namespace RedeSocial.Web.ApiServices.Account
             return IdentityResult.Failed();
         }
 
-        public async Task<SignInResult> LoginAsync(LoginRequest loginRequest)
+        public async Task<AccountViewModel> FindByUserNameAsync(string userName)
+        {
+            var response = await _httpClient.GetAsync("accounts/" + userName);
+
+            AccountViewModel accountViewModel = null;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                accountViewModel = JsonConvert.DeserializeObject<AccountViewModel>(content);
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return accountViewModel;
+        }
+
+
+        public async Task<String> LoginAsync(LoginRequest loginRequest)
         {
             var loginRequestJson = JsonConvert.SerializeObject(loginRequest);
 
             var conteudo = new StringContent(loginRequestJson, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/accounts/login", conteudo);
+            var response = await _httpClient.PostAsync("Authenticates/Token", conteudo);
+
+            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.ToString());
 
             if (response.IsSuccessStatusCode)
             {
-                return SignInResult.Success;
+                return "";
             }
 
-            return SignInResult.Failed;
+            return null;
         }
 
         public async Task Logout()
         {
-            await _httpClient.GetAsync("api/logout");
+            await _httpClient.GetAsync("accounts/logout");
+        }
+
+        public class TokenResult
+        {
+            public String Token { get; set; }
         }
     }
 }

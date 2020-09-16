@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using RedeSocial.Services.Account;
+using System.Text;
 
 namespace RedeSocial.API
 {
@@ -20,6 +23,18 @@ namespace RedeSocial.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            var key = Encoding.UTF8.GetBytes("2CDJT95DNHCGENGF5432418VFNJ37FN598FMD83425XMNXGVATWPTLV94348DH");
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultScheme = "Bearer";
+            }).AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters.ValidIssuer = "ACCOUNTS-API";
+                o.TokenValidationParameters.ValidAudience = "ACCOUNTS-API";
+                o.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(key);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +49,7 @@ namespace RedeSocial.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

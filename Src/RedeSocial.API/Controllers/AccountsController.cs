@@ -10,7 +10,6 @@ using RedeSocial.Services.Account;
 
 namespace RedeSocial.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
@@ -24,22 +23,6 @@ namespace RedeSocial.API.Controllers
             this._accountIdentityManager = accountIdentityManager;
         }
 
-        [AllowAnonymous]
-        [Route("Login")]
-        [HttpPost]
-        public async Task<IActionResult> AuthenticateAsync(LoginRequest model)
-        {
-            if (!ModelState.IsValid)
-                return await Task.FromResult(BadRequest(ModelState));
-
-            var response = await _accountIdentityManager.Login(model.UserName, model.Password);
-
-            if (response == null)
-                return BadRequest(new { message = "Login ou senha Inválidos" });
-
-            return Ok();
-        }
-
         // GET: api/Conta
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
@@ -48,10 +31,10 @@ namespace RedeSocial.API.Controllers
         }
 
         // GET: api/Conta/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetAccount(Guid id)
+        [HttpGet("{username}")]
+        public async Task<ActionResult<Account>> GetAccount(string userName)
         {
-            var account = await AccountService.FindByIdAsync(id.ToString(), default);
+            var account = await AccountService.FindByUserNameAsync(userName, default);
 
             if (account == null)
             {
@@ -115,7 +98,7 @@ namespace RedeSocial.API.Controllers
             return account;
         }
 
-        [Route("api/logout")]
+        [Route("logout")]
         [HttpGet]
         public async Task Logout()
         {

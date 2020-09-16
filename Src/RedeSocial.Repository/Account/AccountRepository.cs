@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedeSocial.Domain.Account.Repository;
+using RedeSocial.Domain.Profile;
 using RedeSocial.Repository.Context;
 using System;
 using System.Collections.Generic;
