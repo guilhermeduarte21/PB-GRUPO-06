@@ -10,9 +10,10 @@ namespace RedeSocial.Domain.Post
     {
         public Guid ID { get; set; }
         public string Descricao { get; set; }
+        public DateTime DataPostagem { get; set; }
         public string FotoPostUrl { get; set; }
 
-        public Perfil ID_Perfil { get; set; } //UMA POSTAGEM TEM UM PERFIL (QUEM POSTOU)
+        public virtual Perfil ID_Perfil { get; set; } //UMA POSTAGEM TEM UM PERFIL (QUEM POSTOU)
         public virtual IList<Comentario> IDs_Comentarios { get; set; } //UMA POSTAGEM TEM MUITOS COMENTARIOS
     }
 }

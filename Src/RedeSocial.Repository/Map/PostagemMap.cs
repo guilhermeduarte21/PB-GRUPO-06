@@ -19,6 +19,7 @@ namespace RedeSocial.Repository.Map
 
             builder.Property(x => x.FotoPostUrl);
             builder.Property(x => x.Descricao).IsRequired();
+            builder.Property(x => x.DataPostagem).IsRequired();
 
             builder.HasOne<Perfil>(x => x.ID_Perfil);
             builder.HasMany<Comentario>(x => x.IDs_Comentarios);
