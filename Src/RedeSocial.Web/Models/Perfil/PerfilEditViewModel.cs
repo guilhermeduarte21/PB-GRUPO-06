@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RedeSocial.Web.ViewModel.Perfil
+namespace RedeSocial.Web.Models.Perfil
 {
     public class PerfilEditViewModel
     {

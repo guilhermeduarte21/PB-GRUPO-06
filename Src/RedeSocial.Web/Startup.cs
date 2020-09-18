@@ -19,9 +19,7 @@ using RedeSocial.Services.Account;
 using RedeSocial.Repository.Context;
 using RedeSocial.Web.ApiServices.Account;
 using RedeSocial.Services.Authenticate;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
+using RedeSocial.Services.Post;
 
 namespace RedeSocial.Web
 {
@@ -40,6 +38,8 @@ namespace RedeSocial.Web
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAuthenticateService, AuthenticateService>();
             services.AddTransient<IAccountIdentityManager, AccountIdentityManager>();
+            services.AddTransient<IPostService, PostService>();
+            services.AddTransient<Domain.Post.IPostagemRepository, Repository.Post.PostagemRepository>();
 
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IUserStore<Account>, AccountRepository>();
@@ -47,18 +47,6 @@ namespace RedeSocial.Web
             services.AddTransient<IRoleStore<Role>, RoleRepository>();
 
             services.AddTransient<IAccountApi, AccountApi>();
-
-            var key = Encoding.UTF8.GetBytes("2CDJT95DNHCGENGF5432418VFNJ37FN598FMD83425XMNXGVATWPTLV94348DH");
-
-            services.AddAuthentication(opt =>
-            {
-                opt.DefaultScheme = "Bearer";
-            }).AddJwtBearer(o =>
-            {
-                o.TokenValidationParameters.ValidIssuer = "ACCOUNTS-API";
-                o.TokenValidationParameters.ValidAudience = "ACCOUNTS-API";
-                o.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(key);
-            });
 
             services.AddDbContext<RedeSocialContext>(opt =>
             {

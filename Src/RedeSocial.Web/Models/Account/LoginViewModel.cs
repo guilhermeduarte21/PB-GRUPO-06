@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RedeSocial.Web.ViewModel.Account
+namespace RedeSocial.Web.Models.Account
 {
     public class LoginViewModel
     {

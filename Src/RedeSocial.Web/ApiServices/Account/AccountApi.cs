@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RedeSocial.Domain.ViewModel;
-using RedeSocial.Web.ViewModel.Account;
-using RedeSocial.Web.ViewModel.Perfil;
+using RedeSocial.Web.Models.Account;
+using RedeSocial.Web.Models.Perfil;
+using RedeSocial.Web.Models.Post;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -26,7 +23,7 @@ namespace RedeSocial.Web.ApiServices.Account
             _httpClient.BaseAddress = new Uri("https://localhost:5001/api/");
         }
 
-        public async Task<IdentityResult> CreateAsync(Domain.Account.Account user)
+        public async Task<IdentityResult> CreateAccountAsync(RegisterViewModel user)
         {
             var userJson = JsonConvert.SerializeObject(user);
 
@@ -78,9 +75,9 @@ namespace RedeSocial.Web.ApiServices.Account
             return perfilEditViewModel;
         }
 
-        public async Task<String> LoginAsync(LoginRequest loginRequest)
+        public async Task<String> LoginAsync(LoginViewModel loginViewModel)
         {
-            var loginRequestJson = JsonConvert.SerializeObject(loginRequest);
+            var loginRequestJson = JsonConvert.SerializeObject(loginViewModel);
 
             var conteudo = new StringContent(loginRequestJson, Encoding.UTF8, "application/json");
 
@@ -96,11 +93,6 @@ namespace RedeSocial.Web.ApiServices.Account
             }
 
             return null;
-        }
-
-        public async Task Logout()
-        {
-            await _httpClient.GetAsync("accounts/logout");
         }
 
         public async Task<IdentityResult> UpdateAsync(PerfilEditViewModel user)
@@ -119,6 +111,22 @@ namespace RedeSocial.Web.ApiServices.Account
             return IdentityResult.Failed();
         }
 
+        public async Task<IdentityResult> CreatePostAsync(PostCreateViewModel post)
+        {
+            var requestJson = JsonConvert.SerializeObject(post);
+
+            var conteudo = new StringContent(requestJson, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("Posts", conteudo);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return IdentityResult.Success;
+            }
+
+            return IdentityResult.Failed();
+        }
+
         public class TokenResult
         {
             public String Token { get; set; }
@@ -127,6 +135,11 @@ namespace RedeSocial.Web.ApiServices.Account
         public void AuthenticationHeader(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        public async Task Logout()
+        {
+            await _httpClient.GetAsync("accounts/logout");
         }
     }
 }

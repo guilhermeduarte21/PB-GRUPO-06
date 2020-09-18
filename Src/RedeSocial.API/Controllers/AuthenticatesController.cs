@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RedeSocial.Domain.ViewModel;
-using RedeSocial.Services.Account;
+using RedeSocial.API.Models;
 using RedeSocial.Services.Authenticate;
 
 namespace RedeSocial.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Authenticates")]
     [ApiController]
     public class AuthenticatesController : ControllerBase
     {

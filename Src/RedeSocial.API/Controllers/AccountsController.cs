@@ -5,12 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedeSocial.Domain.Account;
-using RedeSocial.Domain.ViewModel;
 using RedeSocial.Services.Account;
 
 namespace RedeSocial.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Accounts")]
     [ApiController]
     public class AccountsController : ControllerBase
     {
@@ -23,14 +22,14 @@ namespace RedeSocial.API.Controllers
             this._accountIdentityManager = accountIdentityManager;
         }
 
-        // GET: api/Conta
+        // GET: api/Accounts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
             return await AccountService.GetAccountsAsync();
         }
 
-        // GET: api/Conta/5
+        // GET: api/Accounts/5
         [HttpGet("{username}")]
         public async Task<ActionResult<Account>> GetAccount(string userName)
         {
@@ -44,7 +43,7 @@ namespace RedeSocial.API.Controllers
             return account;
         }
 
-        // PUT: api/Conta/5
+        // PUT: api/Accounts/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(Guid id, Account account)
         {
@@ -73,7 +72,7 @@ namespace RedeSocial.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Conta
+        // POST: api/Accounts
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<Account>> PostAccount(Account account)
@@ -83,7 +82,7 @@ namespace RedeSocial.API.Controllers
             return CreatedAtAction("GetAccount", new { id = account.ID });
         }
 
-        // DELETE: api/Conta/5
+        // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Account>> DeleteAccount(Guid id)
         {

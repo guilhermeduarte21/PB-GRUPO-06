@@ -1,15 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Blob;
 using RedeSocial.CrossCutting.UploadImg;
-using RedeSocial.Services.Account;
 using RedeSocial.Web.ApiServices.Account;
-using RedeSocial.Web.ViewModel.Perfil;
+using RedeSocial.Web.Models.Perfil;
 
 namespace RedeSocial.Web.Controllers
 {
@@ -17,13 +13,11 @@ namespace RedeSocial.Web.Controllers
     public class PerfilController : Controller
     {
         private readonly IAccountApi _accountApi;
-        private readonly IAccountIdentityManager _accountIdentityManager;
         public string UserName => this.User.Identity.Name;
 
-        public PerfilController(IAccountApi accountApi, IAccountIdentityManager accountIdentityManager)
+        public PerfilController(IAccountApi accountApi)
         {
             _accountApi = accountApi;
-            _accountIdentityManager = accountIdentityManager;
         }
 
         // GET: PerfilController
@@ -31,25 +25,13 @@ namespace RedeSocial.Web.Controllers
         {
             var response = await _accountApi.FindByUserNameAsync(UserName);
 
-            if (response == null)
-                return RedirectToAction(nameof(Logout));
-
             return View(response);
-        }
-
-        // GET: PerfilController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: PerfilController/Edit/5
         public async Task<IActionResult> Edit()
         {
             var response = await _accountApi.GetPerfilToUpdate(UserName);
-
-            if (response == null)
-                return RedirectToAction(nameof(Logout));
 
             return View(response);
         }
@@ -81,14 +63,6 @@ namespace RedeSocial.Web.Controllers
             {
                 return View();
             }
-        }
-
-        [HttpGet]
-        public IActionResult Logout()
-        {
-            _accountIdentityManager.Logout();
-
-            return Redirect("/");
         }
     }
 }

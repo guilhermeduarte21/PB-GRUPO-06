@@ -1,35 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using RedeSocial.Domain.Account;
-using RedeSocial.Web.ViewModel.Account;
+using RedeSocial.Web.Models.Account;
 using RedeSocial.Web.ApiServices.Account;
-using RedeSocial.Domain.ViewModel;
 using RedeSocial.Services.Account;
-using Microsoft.AspNetCore.Http;
 
 namespace RedeSocial.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ILogger<AccountController> _logger;
         private readonly IAccountApi _accountApi;
         private readonly IAccountIdentityManager _accountIdentityManager;
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private ISession _session => _httpContextAccessor.HttpContext.Session;
-
-        public AccountController(ILogger<AccountController> logger, IAccountApi accountApi, IAccountIdentityManager accountIdentityManager,
-                                    IHttpContextAccessor httpContextAccessor)
+        public AccountController(IAccountApi accountApi, IAccountIdentityManager accountIdentityManager)
         {
-            _logger = logger;
             _accountApi = accountApi;
             _accountIdentityManager = accountIdentityManager;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Index()
@@ -49,19 +35,10 @@ namespace RedeSocial.Web.Controllers
         {
             try
             {
-                var user = new LoginRequest
-                {
-                    UserName = model.UserName,
-                    Password = model.Password,
-                };
-
                 //Services
-                var aut = await _accountIdentityManager.Login(user.UserName, user.Password);
+                var aut = await _accountIdentityManager.Login(model.UserName, model.Password);
                 //Api
-                var token  = await _accountApi.LoginAsync(user);
-
-                //Session["token"] = token;
-                _session.SetString("token", token);
+                var token  = await _accountApi.LoginAsync(model);
 
                 if (aut == null)
                 {
@@ -96,22 +73,10 @@ namespace RedeSocial.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var user = new Account
-                    {
-                        UserName = model.UserName,
-                        Email = model.Email,
-                        Password = model.Password,
-                        Nome = model.Name,
-                        SobreNome = model.SobreNome,
-                        DataNascimento = model.DtBirthday,
-                        FotoPerfilUrl = "https://redesocialinfnet.blob.core.windows.net/fotos-perfil/perfil.png"
-                    };
-
-                    var response = await _accountApi.CreateAsync(user);
+                    var response = await _accountApi.CreateAccountAsync(model);
 
                     if (response.Succeeded)
                     {
-                        _logger.LogInformation("Cadastrado com sucesso!");
                         return View(nameof(Success));
                     }
                     else
@@ -134,19 +99,6 @@ namespace RedeSocial.Web.Controllers
         public IActionResult Success()
         {
             return View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Logout()
-        {
-            await _accountApi.Logout();
-
-            return View();
-        }
-
-        public class TokenResult
-        {
-            public String Token { get; set; }
         }
     }
 }

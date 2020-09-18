@@ -12,6 +12,8 @@ namespace RedeSocial.Repository.Post
 {
     public class PostagemRepository : IUserStore<Postagem>, IPostagemRepository
     {
+        private bool disposedValue;
+
         private RedeSocialContext Context { get; set; }
 
         public PostagemRepository(RedeSocialContext redeSocialContext)
@@ -31,11 +33,6 @@ namespace RedeSocial.Repository.Post
             this.Context.Postagens.Remove(user);
             await this.Context.SaveChangesAsync();
             return IdentityResult.Success;
-        }
-
-        public void Dispose()
-        {
-
         }
 
         public async Task<Postagem> FindByIdAsync(string userId, CancellationToken cancellationToken)
@@ -104,6 +101,29 @@ namespace RedeSocial.Repository.Post
         public async Task<IList<Comentario>> GetIDs_ComentariosAsync(Postagem user, CancellationToken cancellationToken)
         {
             return await Task.FromResult(user.IDs_Comentarios);
+        }
+
+        public async Task<IEnumerable<Postagem>> GetPostsAsync()
+        {
+            return await this.Context.Postagens.ToListAsync();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

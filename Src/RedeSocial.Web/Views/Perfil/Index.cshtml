@@ -1,4 +1,4 @@
-﻿@model RedeSocial.Web.ViewModel.Account.AccountViewModel
+﻿@model RedeSocial.Web.Models.Account.AccountViewModel
 
 @{
     ViewData["Title"] = "Perfil";
@@ -18,19 +18,19 @@
                 <li class="twPc-ArrangeSizeFit mr-3">
                     <a href="#" title="Postagens">
                         <span class="twPc-StatLabel twPc-block">Postagens</span>
-                        <span class="twPc-StatValue">0</span>
+                        <span class="twPc-StatValue">@Model.IDs_Postagens.Count</span>
                     </a>
                 </li>
                 <li class="twPc-ArrangeSizeFit mr-3">
                     <a href="#" title="Seguindo">
                         <span class="twPc-StatLabel twPc-block">Seguindo</span>
-                        <span class="twPc-StatValue">0</span>
+                        <span class="twPc-StatValue">@Model.IDs_Seguindo.Count</span>
                     </a>
                 </li>
                 <li class="twPc-ArrangeSizeFit">
                     <a href="#" title="Seguidores">
                         <span class="twPc-StatLabel twPc-block">Seguidores</span>
-                        <span class="twPc-StatValue">0</span>
+                        <span class="twPc-StatValue">@Model.IDs_Seguidores.Count</span>
                     </a>
                 </li>
             </ul>

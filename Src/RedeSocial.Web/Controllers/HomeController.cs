@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using RedeSocial.CrossCutting.UploadImg;
 using RedeSocial.Services.Account;
 using RedeSocial.Web.ApiServices.Account;
 using RedeSocial.Web.Models;
+using RedeSocial.Web.Models.Post;
 
 namespace RedeSocial.Web.Controllers
 {
@@ -49,6 +50,50 @@ namespace RedeSocial.Web.Controllers
         public IActionResult Perfil()
         {
             return Redirect("/Perfil");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(IFormFile imagem, string message)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string urlImg = null;
+
+                    if (imagem != null)
+                    {
+                        urlImg = Upload.UploadFoto(imagem.OpenReadStream(), new GuidValueGenerator().ToString(), "fotos-post");
+                    }
+
+                    var post = new PostCreateViewModel
+                    {
+                        Descricao = message,
+                        DataPostagem = DateTime.Now,
+                        FotoPostUrl = urlImg
+                    };
+
+                    var response = await _accountApi.CreatePostAsync(post);
+
+                    if (response.Succeeded)
+                    {
+                        _logger.LogInformation("Postado com sucesso!");
+                        return Redirect("/");
+                    }
+                    else
+                    {
+                        return Redirect("/");
+                    }
+                }
+
+                return Redirect("/");
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "Ocorreu um erro, por favor tente mais tarde.");
+                return View();
+            }
         }
 
         [HttpGet]

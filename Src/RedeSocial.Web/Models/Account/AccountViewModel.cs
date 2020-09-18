@@ -2,11 +2,8 @@
 using RedeSocial.Domain.Post;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace RedeSocial.Web.ViewModel.Account
+namespace RedeSocial.Web.Models.Account
 {
     public class AccountViewModel
     {

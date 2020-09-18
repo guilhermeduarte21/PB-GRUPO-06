@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using RedeSocial.Domain.Account;
+using RedeSocial.Domain.Post;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RedeSocial.Domain.Post
+namespace RedeSocial.Services.Post
 {
-    public interface IPostagemRepository
+    public interface IPostService
     {
         Task<IdentityResult> CreateAsync(Postagem user, CancellationToken cancellationToken);
         Task<IdentityResult> DeleteAsync(Postagem user, CancellationToken cancellationToken);
@@ -22,7 +22,8 @@ namespace RedeSocial.Domain.Post
         Task<IdentityResult> UpdateAsync(Postagem user, CancellationToken cancellationToken);
         Task<string> GetDescricaoAsync(Postagem user, CancellationToken cancellationToken);
         Task<string> GetFotoPostUrlAsync(Postagem user, CancellationToken cancellationToken);
-        Task<Account.Account> GetID_AccountAsync(Postagem user, CancellationToken cancellationToken);
+        Task<Domain.Account.Account> GetID_AccountAsync(Postagem user, CancellationToken cancellationToken);
         Task<IList<Comentario>> GetIDs_ComentariosAsync(Postagem user, CancellationToken cancellationToken);
+        Task<IEnumerable<Postagem>> GetPostsAsync();
     }
 }
