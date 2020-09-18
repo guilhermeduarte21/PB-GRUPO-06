@@ -1,5 +1,4 @@
-﻿<!DOCTYPE html>
-<html lang="pt-br">
+﻿<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -41,7 +40,7 @@
                                 <a class="nav-link" asp-action="Index" asp-controller="Home">Itens salvos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-action="Perfil" asp-controller="Home">Perfil</a>
+                                <a class="nav-link" asp-action="Index" asp-controller="Perfil">Perfil</a>
                             </li>
                         </ul>
 
@@ -64,11 +63,11 @@
     }
     else
     {
-    <div class="container">
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
+        <div class="container">
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>
     }
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

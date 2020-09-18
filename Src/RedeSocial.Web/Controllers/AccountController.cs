@@ -10,6 +10,7 @@ using RedeSocial.Web.ViewModel.Account;
 using RedeSocial.Web.ApiServices.Account;
 using RedeSocial.Domain.ViewModel;
 using RedeSocial.Services.Account;
+using Microsoft.AspNetCore.Http;
 
 namespace RedeSocial.Web.Controllers
 {
@@ -19,11 +20,16 @@ namespace RedeSocial.Web.Controllers
         private readonly IAccountApi _accountApi;
         private readonly IAccountIdentityManager _accountIdentityManager;
 
-        public AccountController(ILogger<AccountController> logger, IAccountApi accountApi, IAccountIdentityManager accountIdentityManager)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private ISession _session => _httpContextAccessor.HttpContext.Session;
+
+        public AccountController(ILogger<AccountController> logger, IAccountApi accountApi, IAccountIdentityManager accountIdentityManager,
+                                    IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _accountApi = accountApi;
             _accountIdentityManager = accountIdentityManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Index()
@@ -48,14 +54,16 @@ namespace RedeSocial.Web.Controllers
                     UserName = model.UserName,
                     Password = model.Password,
                 };
+
                 //Services
-                var result = await _accountIdentityManager.Login(user.UserName, user.Password);
-
+                var aut = await _accountIdentityManager.Login(user.UserName, user.Password);
                 //Api
-                //var result  = _accountApi.LoginAsync(user);
+                var token  = await _accountApi.LoginAsync(user);
 
+                //Session["token"] = token;
+                _session.SetString("token", token);
 
-                if (result == null)
+                if (aut == null)
                 {
                     ModelState.AddModelError(string.Empty, "Login ou senha inválidos");
                     return View(model);
@@ -95,7 +103,8 @@ namespace RedeSocial.Web.Controllers
                         Password = model.Password,
                         Nome = model.Name,
                         SobreNome = model.SobreNome,
-                        DataNascimento = model.DtBirthday
+                        DataNascimento = model.DtBirthday,
+                        FotoPerfilUrl = "https://redesocialinfnet.blob.core.windows.net/fotos-perfil/perfil.png"
                     };
 
                     var response = await _accountApi.CreateAsync(user);
@@ -133,6 +142,11 @@ namespace RedeSocial.Web.Controllers
             await _accountApi.Logout();
 
             return View();
+        }
+
+        public class TokenResult
+        {
+            public String Token { get; set; }
         }
     }
 }

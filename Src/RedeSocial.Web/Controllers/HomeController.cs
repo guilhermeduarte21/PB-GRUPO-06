@@ -28,9 +28,11 @@ namespace RedeSocial.Web.Controllers
             _accountIdentityManager = accountIdentityManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var response = await _accountApi.FindByUserNameAsync(UserName);
+
+            return View(response);
         }
 
         public IActionResult Privacy()
@@ -44,14 +46,9 @@ namespace RedeSocial.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<ActionResult> Perfil()
+        public IActionResult Perfil()
         {
-            var response = await _accountApi.FindByUserNameAsync(UserName);
-
-            if (response == null)
-                return RedirectToAction(nameof(Logout));
-
-            return View(response);
+            return Redirect("/Perfil");
         }
 
         [HttpGet]

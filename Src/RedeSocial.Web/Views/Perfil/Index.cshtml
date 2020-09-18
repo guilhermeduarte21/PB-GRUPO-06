@@ -9,10 +9,10 @@
 <div class="container">
     <div class="fb-profile">
         <img align="left" class="fb-image-lg" src="http://lorempixel.com/850/280/food/" alt="Profile image example" />
-        <img align="left" class="fb-image-profile thumbnail" src="https://robohash.org/@(this.User.Claims.First(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value)?size=180x180&bgset=bg1" alt="Profile image example" />
+        <img align="left" class="fb-image-profile thumbnail" src="https://robohash.org/@(this.User.Claims.First(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value)?size=180x180&bgset=bg1" width="180" height="180" alt="Profile image example" />
         <div class="fb-profile-text">
             <h1>@Model.Nome @Model.SobreNome</h1>
-            <h6>@Model.UserName</h6>
+            <h6> @Model.UserName</h6>
 
             <ul class="d-flex flex-row">
                 <li class="twPc-ArrangeSizeFit mr-3">
@@ -36,4 +36,5 @@
             </ul>
         </div>
     </div>
+    <hr />
 </div> 

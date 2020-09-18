@@ -10,7 +10,7 @@ namespace RedeSocial.Services.Account
 {
     public interface IAccountIdentityManager
     {
-        Task<String> Login(string userName, string password);
+        Task<SignInResult> Login(string userName, string password);
         Task Logout();
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RedeSocial.Domain.ViewModel;
 using RedeSocial.Services.Account;
+using RedeSocial.Services.Authenticate;
 
 namespace RedeSocial.API.Controllers
 {
@@ -13,11 +14,11 @@ namespace RedeSocial.API.Controllers
     [ApiController]
     public class AuthenticatesController : ControllerBase
     {
-        private readonly IAccountIdentityManager _accountIdentityManager;
+        private readonly IAuthenticateService _authenticateService;
 
-        public AuthenticatesController(IAccountIdentityManager accountIdentityManager)
+        public AuthenticatesController(IAuthenticateService authenticateService)
         {
-            this._accountIdentityManager = accountIdentityManager;
+            this._authenticateService = authenticateService;
         }
 
         [Route("Token")]
@@ -28,7 +29,7 @@ namespace RedeSocial.API.Controllers
             if (!ModelState.IsValid)
                 return await Task.FromResult(BadRequest(ModelState));
 
-            var token = _accountIdentityManager.Login(loginRequest.UserName, loginRequest.Password);
+            var token = _authenticateService.Login(loginRequest.UserName, loginRequest.Password);
 
             if (String.IsNullOrWhiteSpace(token.Result))
             {
@@ -40,5 +41,6 @@ namespace RedeSocial.API.Controllers
                 Token = token.Result
             });
         }
+
     }
 }

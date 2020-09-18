@@ -95,7 +95,14 @@ namespace RedeSocial.Services.Account
 
         public async Task<IdentityResult> UpdateAsync(Domain.Account.Account user, CancellationToken cancellationToken)
         {
-            return await AccountRepository.UpdateAsync(user, cancellationToken);
+            var account = await AccountRepository.FindByIdAsync(user.ID.ToString(), cancellationToken);
+
+            account.Nome = user.Nome;
+            account.SobreNome = user.SobreNome;
+            account.DataNascimento = user.DataNascimento;
+            account.FotoPerfilUrl = user.FotoPerfilUrl;
+
+            return await AccountRepository.UpdateAsync(account, cancellationToken);
         }
 
         public async Task<Domain.Account.Account> GetAccountByEmailPassword(string email, string password)
