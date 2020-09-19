@@ -8,7 +8,7 @@
 
 <div class="container">
     <div class="fb-profile">
-        <img align="left" class="fb-image-lg" src="http://lorempixel.com/850/280/food/" alt="Profile image example" />
+        <img align="left" class="fb-image-lg" src="http://placeimg.com/850/280/tech" alt="Profile image example" />
         <img align="left" class="fb-image-profile thumbnail" src="https://robohash.org/@(this.User.Claims.First(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value)?size=180x180&bgset=bg1" width="180" height="180" alt="Profile image example" />
         <div class="fb-profile-text">
             <h1>@Model.Nome @Model.SobreNome</h1>
@@ -37,6 +37,7 @@
         </div>
     </div>
     <hr />
+
     @foreach (var item in Model.IDs_Postagens)
     {
         <div class="card gedf-card">
@@ -48,7 +49,7 @@
                         </div>
                         <div class="ml-2">
                             <div class="h5 m-0"></div>
-                            <div class="h7 text-muted">@Html.DisplayFor(modelItem => item.ID_Account.Nome) @Html.DisplayFor(modelItem => item.ID_Account.SobreNome)</div>
+                            <div class="h7 text-muted">@Model.Nome @Model.SobreNome</div>
                         </div>
                     </div>
                 </div>
@@ -56,16 +57,14 @@
 
             <div class="card-body">
                 <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>@Html.DisplayFor(modelItem => item.DataPostagem)</div>
-                <a class="card-link" href="#">
-                    <h5 class="card-title">Titulo do bglh</h5>
-                </a>
 
                 <p class="card-text">
                     @Html.DisplayFor(modelItem => item.Descricao)
-                    @if (@Html.DisplayFor(modelItem => item.FotoPostUrl) != null)
+
+                    @if (!string.IsNullOrWhiteSpace(item.FotoPostUrl))
                     {
                         <div>
-                            <img class="rounded-circle" width="200" height="200" src="@Html.DisplayFor(modelItem => item.FotoPostUrl)" alt="">
+                            <img width="200" height="200" src="@Html.DisplayFor(modelItem => item.FotoPostUrl)" alt="">
                         </div>
                     }
                 </p>
@@ -76,5 +75,6 @@
                 <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Compartilhar</a>
             </div>
         </div>
+        <hr />
     }
 </div> 

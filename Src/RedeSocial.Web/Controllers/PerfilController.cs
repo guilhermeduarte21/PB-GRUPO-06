@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +26,9 @@ namespace RedeSocial.Web.Controllers
         {
             var response = await _accountApi.FindByUserNameAsync(UserName);
 
-            response.IDs_Postagens = await _accountApi.GetPostByAccountAsync(response.ID);
+            var list = await _accountApi.GetPostByAccountAsync(response.ID);
+            var listSorted = list.OrderByDescending(x => x.DataPostagem).ToList();
+            response.IDs_Postagens = listSorted;
 
             return View(response);
         }
