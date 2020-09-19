@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,18 @@ namespace RedeSocial.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var response = await _accountApi.FindByUserNameAsync(UserName);
+            
+            var list = await _accountApi.GetPostByAccountAsync(response.ID);
+
+            foreach(var item in response.IDs_Seguindo)
+            {
+                var listPostSeguindo = await _accountApi.GetPostByAccountAsync(item.ID);
+
+                list.AddRange(listPostSeguindo);
+            }
+
+            var listSorted = list.OrderByDescending(x => x.DataPostagem).ToList();
+            response.IDs_Postagens = listSorted;
 
             return View(response);
         }

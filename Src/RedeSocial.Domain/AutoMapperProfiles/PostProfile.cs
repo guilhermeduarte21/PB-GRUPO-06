@@ -11,6 +11,7 @@ namespace RedeSocial.Domain.AutoMapperProfiles
         public PostProfile()
         {
             CreateMap<Postagem, PostagemResponse>();
+            CreateMap<Account.Account, Account.AccountSimplesResponse>();
         }
     }
 }
