@@ -14,6 +14,7 @@ namespace RedeSocial.Domain.Account.Repository
         Task<IdentityResult> DeleteAsync(Account user, CancellationToken cancellationToken);
         Task<Account> FindByIdAsync(string userId, CancellationToken cancellationToken);
         Task<Account> FindByUserNameAsync(string UserName, CancellationToken cancellationToken);
+        Task<ActionResult<IEnumerable<Domain.Account.Account>>> FindAccountAsync(string name, CancellationToken cancellationToken);
         Task<Account> FindByEmailAsync(string Email, CancellationToken cancellationToken);
         Task<string> GetUserIdAsync(Account user, CancellationToken cancellationToken);
         Task<string> GetUserNameAsync(Account user, CancellationToken cancellationToken);

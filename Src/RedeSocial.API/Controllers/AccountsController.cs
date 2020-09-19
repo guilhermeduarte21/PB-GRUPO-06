@@ -52,6 +52,18 @@ namespace RedeSocial.API.Controllers
 
             return Ok(account);
         }
+        [HttpGet("pesquisa/{name}")]
+        public ActionResult GetAccountByName(string name)
+        {
+            var accounts = _accountService.FindAccountAsync(name, default);
+
+            if (accounts.Result == null)
+                return NotFound();
+
+            var response = _mapper.Map<List<AccountSimplesResponse>>(accounts.Result.Value);
+
+            return Ok(response);
+        }
         // PUT: api/Accounts/5
         [HttpPut("{id}")]
         public async Task<ActionResult> PutAccount(Guid id, Account account)

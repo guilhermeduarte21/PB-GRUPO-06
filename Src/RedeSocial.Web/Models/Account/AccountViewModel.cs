@@ -18,11 +18,12 @@ namespace RedeSocial.Web.Models.Account
         public string SobreNome { get; set; }
         public DateTime DataNascimento { get; set; }
 
-        public virtual Role ID_Role { get; set; } //UMA CONTA TEM UMA ROLE | UMA ROLE TEM MUITAS CONTAS (M : 1)
+        public virtual Role ID_Role { get; set; }
 
 
-        public virtual IList<Domain.Account.Account> IDs_Seguidores { get; set; } //UM PERFIL TEM MUITOS SEGUIDORES
-        public virtual IList<Domain.Account.Account> IDs_Seguindo { get; set; } //UM PERFIL PODE SEGUIR MUITOS PERFIS
-        public virtual List<PostViewModel> IDs_Postagens { get; set; } = new List<PostViewModel>(); //UM PERFIL TEM MUITAS POSTAGENS
+        public virtual IList<Domain.Account.Account> IDs_Seguidores { get; set; }
+        public virtual IList<Domain.Account.Account> IDs_Seguindo { get; set; }
+        public virtual List<PostViewModel> IDs_Postagens { get; set; } = new List<PostViewModel>();
+        public virtual List<AccountSimplesViewModel> Accounts_Busca { get; set; } = new List<AccountSimplesViewModel>();
     }
 }

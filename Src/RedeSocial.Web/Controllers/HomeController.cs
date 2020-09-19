@@ -31,13 +31,13 @@ namespace RedeSocial.Web.Controllers
             _accountIdentityManager = accountIdentityManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string busca)
         {
-            var response = await _accountApi.FindByUserNameAsync(UserName);
+            var accountResponse = await _accountApi.FindByUserNameAsync(UserName);
             
-            var list = await _accountApi.GetPostByAccountAsync(response.ID);
+            var list = await _accountApi.GetPostByAccountAsync(accountResponse.ID);
 
-            foreach(var item in response.IDs_Seguindo)
+            foreach(var item in accountResponse.IDs_Seguindo)
             {
                 var listPostSeguindo = await _accountApi.GetPostByAccountAsync(item.ID);
 
@@ -45,14 +45,16 @@ namespace RedeSocial.Web.Controllers
             }
 
             var listSorted = list.OrderByDescending(x => x.DataPostagem).ToList();
-            response.IDs_Postagens = listSorted;
+            accountResponse.IDs_Postagens = listSorted;
 
-            return View(response);
-        }
+            if (!String.IsNullOrEmpty(busca))
+            {
+                var buscaResponse = await _accountApi.GetFindAccountsAsync(busca);
+                accountResponse.Accounts_Busca.AddRange(buscaResponse);
+            }
 
-        public IActionResult Privacy()
-        {
-            return View();
+
+            return View(accountResponse);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

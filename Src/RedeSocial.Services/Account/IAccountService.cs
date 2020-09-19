@@ -25,5 +25,6 @@ namespace RedeSocial.Services.Account
         Task<Domain.Account.Account> GetAccountByEmailPassword(string email, string password);
         Task<Domain.Account.Account> GetAccountByUserNamePassword(string userName, string password);
         Task<ActionResult<IEnumerable<Domain.Account.Account>>> GetAccountsAsync();
+        Task<ActionResult<IEnumerable<Domain.Account.Account>>> FindAccountAsync(string name, CancellationToken cancellationToken);
     }
 }

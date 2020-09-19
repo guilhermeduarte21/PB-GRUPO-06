@@ -20,6 +20,7 @@ namespace RedeSocial.Web.ApiServices.Account
         void AuthenticationHeader(string token);
 
         Task<List<PostViewModel>> GetPostByAccountAsync(Guid id);
+        Task<List<AccountSimplesViewModel>> GetFindAccountsAsync(string nome);
 
         Task<IdentityResult> CreatePostAsync(Guid id, PostCreateViewModel post);
         //Task<IdentityResult> EditPostAsync(PostCreateViewModel post);

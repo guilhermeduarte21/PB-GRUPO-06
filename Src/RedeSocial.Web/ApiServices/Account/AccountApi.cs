@@ -160,5 +160,23 @@ namespace RedeSocial.Web.ApiServices.Account
 
             return listPostViewModel;
         }
+
+        public async Task<List<AccountSimplesViewModel>> GetFindAccountsAsync(string nome)
+        {
+            var response = await _httpClient.GetAsync("accounts/pesquisa/" + nome);
+
+            List<AccountSimplesViewModel> listaccountsSimplesViewModel = null;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                listaccountsSimplesViewModel = JsonConvert.DeserializeObject<List<AccountSimplesViewModel>>(content);
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return listaccountsSimplesViewModel;
+        }
     }
 }

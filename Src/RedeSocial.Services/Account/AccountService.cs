@@ -113,5 +113,10 @@ namespace RedeSocial.Services.Account
         {
             return await AccountRepository.GetAccountsAsync();
         }
+
+        public async Task<ActionResult<IEnumerable<Domain.Account.Account>>> FindAccountAsync(string name, CancellationToken cancellationToken)
+        {
+            return await AccountRepository.FindAccountAsync(name, cancellationToken);
+        }
     }
 }

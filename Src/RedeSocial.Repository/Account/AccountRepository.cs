@@ -136,5 +136,12 @@ namespace RedeSocial.Repository.Account
         {
            return await this.Context.Accounts.ToListAsync();
         }
+
+        public async Task<ActionResult<IEnumerable<Domain.Account.Account>>> FindAccountAsync(string name, CancellationToken cancellationToken)
+        {
+            var list = this.Context.Accounts.Where(o => o.Nome.ToLower().Contains(name.Trim().ToLower())).ToList();
+
+            return list;
+        }
     }
 }
