@@ -96,11 +96,6 @@ namespace RedeSocial.Services.Account
         {
             var account = await AccountRepository.FindByIdAsync(user.ID.ToString(), cancellationToken);
 
-            account.Nome = user.Nome;
-            account.SobreNome = user.SobreNome;
-            account.DataNascimento = user.DataNascimento;
-            account.FotoPerfilUrl = user.FotoPerfilUrl;
-
             return await AccountRepository.UpdateAsync(account, cancellationToken);
         }
 

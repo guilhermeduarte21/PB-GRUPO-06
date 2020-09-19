@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using RedeSocial.API.Models;
+using RedeSocial.API.Models.Authenticate;
 using RedeSocial.Services.Authenticate;
 
 namespace RedeSocial.API.Controllers

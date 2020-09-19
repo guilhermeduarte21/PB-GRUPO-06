@@ -18,7 +18,9 @@ namespace RedeSocial.Web.ApiServices.Account
 
         void AuthenticationHeader(string token);
 
-        Task<IdentityResult> CreatePostAsync(PostCreateViewModel post);
+        Task<IdentityResult> CreatePostAsync(Guid id, PostCreateViewModel post);
+        //Task<IdentityResult> EditPostAsync(PostCreateViewModel post);
+        //Task<IdentityResult> DeletePostAsync(PostCreateViewModel post);
 
         Task Logout();
     }

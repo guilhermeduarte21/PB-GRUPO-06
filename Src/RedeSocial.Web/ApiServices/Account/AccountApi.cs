@@ -111,13 +111,13 @@ namespace RedeSocial.Web.ApiServices.Account
             return IdentityResult.Failed();
         }
 
-        public async Task<IdentityResult> CreatePostAsync(PostCreateViewModel post)
+        public async Task<IdentityResult> CreatePostAsync(Guid id, PostCreateViewModel post)
         {
             var requestJson = JsonConvert.SerializeObject(post);
 
             var conteudo = new StringContent(requestJson, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("Posts", conteudo);
+            var response = await _httpClient.PostAsync("Accounts/" + id + "/posts", conteudo);
 
             if (response.IsSuccessStatusCode)
             {

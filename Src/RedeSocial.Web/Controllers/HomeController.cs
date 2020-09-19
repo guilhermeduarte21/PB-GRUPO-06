@@ -64,7 +64,7 @@ namespace RedeSocial.Web.Controllers
 
                     if (imagem != null)
                     {
-                        urlImg = Upload.UploadFoto(imagem.OpenReadStream(), new GuidValueGenerator().ToString(), "fotos-post");
+                        urlImg = Upload.UploadFoto(imagem.OpenReadStream(), Guid.NewGuid().ToString(), "fotos-post");
                     }
 
                     var post = new PostCreateViewModel
@@ -74,7 +74,9 @@ namespace RedeSocial.Web.Controllers
                         FotoPostUrl = urlImg
                     };
 
-                    var response = await _accountApi.CreatePostAsync(post);
+                    var account = await _accountApi.FindByUserNameAsync(UserName);
+
+                    var response = await _accountApi.CreatePostAsync(account.ID, post);
 
                     if (response.Succeeded)
                     {

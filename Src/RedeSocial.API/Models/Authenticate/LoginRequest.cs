@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RedeSocial.API.Models
+namespace RedeSocial.API.Models.Authenticate
 {
     public class LoginRequest
     {

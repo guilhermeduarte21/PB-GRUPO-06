@@ -6,7 +6,7 @@ namespace RedeSocial.Web.Models.Account
     public class RegisterViewModel
     {
         [Required]
-        public String Name { get; set; }
+        public String Nome { get; set; }
         [Required]
         public String SobreNome { get; set; }
 
@@ -18,7 +18,7 @@ namespace RedeSocial.Web.Models.Account
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime DtBirthday { get; set; }
+        public DateTime DataNascimento { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

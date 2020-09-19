@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedeSocial.Domain.Account;
+using RedeSocial.Domain.Post;
 using RedeSocial.Services.Account;
+using RedeSocial.Services.Post;
 
 namespace RedeSocial.API.Controllers
 {
@@ -13,39 +15,42 @@ namespace RedeSocial.API.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly IAccountService AccountService;
+        private readonly IAccountService _accountService;
         private readonly IAccountIdentityManager _accountIdentityManager;
+        private readonly IPostService _postService;
 
-        public AccountsController(IAccountService accountService, IAccountIdentityManager accountIdentityManager)
+        public AccountsController(IAccountService accountService, IAccountIdentityManager accountIdentityManager, IPostService postService)
         {
-            this.AccountService = accountService;
+            this._accountService = accountService;
             this._accountIdentityManager = accountIdentityManager;
+            this._postService = postService;
         }
 
+        #region API ACCOUNT
         // GET: api/Accounts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
-            return await AccountService.GetAccountsAsync();
-        }
+            var listaAccounts = await _accountService.GetAccountsAsync();
 
+            return Ok(listaAccounts);
+        }
         // GET: api/Accounts/5
         [HttpGet("{username}")]
         public async Task<ActionResult<Account>> GetAccount(string userName)
         {
-            var account = await AccountService.FindByUserNameAsync(userName, default);
+            var account = await _accountService.FindByUserNameAsync(userName, default);
 
             if (account == null)
             {
                 return NotFound();
             }
 
-            return account;
+            return Ok(account);
         }
-
         // PUT: api/Accounts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(Guid id, Account account)
+        public async Task<ActionResult> PutAccount(Guid id, Account account)
         {
             if (id != account.ID)
             {
@@ -55,7 +60,7 @@ namespace RedeSocial.API.Controllers
 
             try
             {
-                await AccountService.UpdateAsync(account, default);
+                await _accountService.UpdateAsync(account, default);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -71,42 +76,67 @@ namespace RedeSocial.API.Controllers
 
             return NoContent();
         }
-
         // POST: api/Accounts
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
-            await AccountService.CreateAsync(account, default);
+            await _accountService.CreateAsync(account, default);
 
             return CreatedAtAction("GetAccount", new { id = account.ID });
         }
-
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Account>> DeleteAccount(Guid id)
         {
-            var account = await AccountService.FindByIdAsync(id.ToString(), default);
+            var account = await _accountService.FindByIdAsync(id.ToString(), default);
             if (account == null)
             {
                 return NotFound();
             }
 
-            await AccountService.DeleteAsync(account, default);
+            await _accountService.DeleteAsync(account, default);
 
             return account;
         }
-
         [Route("logout")]
         [HttpGet]
-        public async Task Logout()
+        public async Task<ActionResult> Logout()
         {
             await this._accountIdentityManager.Logout();
+            return Ok("Deslogado!");
         }
-
         private bool AccountExists(Guid id)
         {
-            return AccountService.FindByIdAsync(id.ToString(), default) != null;
+            return _accountService.FindByIdAsync(id.ToString(), default) != null;
         }
+        #endregion //API ACCOUNT
+
+        #region API POST
+        [HttpGet("{id}/posts")]
+        public ActionResult GetPostsDaAccount([FromRoute] Guid id)
+        {
+            var account = _accountService.FindByIdAsync(id.ToString(), default);
+
+            if (account == null)
+                return NotFound();
+
+            return Ok(account.Result.IDs_Postagens);
+        }
+
+        [HttpPost("{id}/posts")]
+        public async Task<ActionResult> PostPostsDaAccount([FromRoute] Guid id, [FromBody] Postagem postagem)
+        {
+            var account = await _accountService.FindByIdAsync(id.ToString(), default);
+
+            if (account == null)
+                return NotFound();
+
+            postagem.ID_Account = account;
+            await _postService.CreateAsync(postagem, default);
+
+            return CreatedAtAction(nameof(PostPostsDaAccount), new { postagem.ID });
+        }
+        #endregion //API POST
     }
 }
