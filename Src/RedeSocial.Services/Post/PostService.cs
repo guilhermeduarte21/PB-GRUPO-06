@@ -91,5 +91,10 @@ namespace RedeSocial.Services.Post
         {
             return await PostagemRepository.GetPostsAsync();
         }
+
+        public async Task<IList<Postagem>> GetPostByAccountAsync(Guid id, CancellationToken cancellationToken)
+        {
+            return await PostagemRepository.GetPostByAccountAsync(id, cancellationToken);
+        }
     }
 }

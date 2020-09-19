@@ -1,5 +1,6 @@
 ﻿using RedeSocial.Domain.Account;
 using RedeSocial.Domain.Post;
+using RedeSocial.Web.Models.Post;
 using System;
 using System.Collections.Generic;
 
@@ -22,6 +23,6 @@ namespace RedeSocial.Web.Models.Account
 
         public virtual IList<Domain.Account.Account> IDs_Seguidores { get; set; } //UM PERFIL TEM MUITOS SEGUIDORES
         public virtual IList<Domain.Account.Account> IDs_Seguindo { get; set; } //UM PERFIL PODE SEGUIR MUITOS PERFIS
-        public virtual IList<Postagem> IDs_Postagens { get; set; } = new List<Postagem>(); //UM PERFIL TEM MUITAS POSTAGENS
+        public virtual List<PostViewModel> IDs_Postagens { get; set; } = new List<PostViewModel>(); //UM PERFIL TEM MUITAS POSTAGENS
     }
 }

@@ -3,6 +3,7 @@ using RedeSocial.Web.Models.Account;
 using RedeSocial.Web.Models.Perfil;
 using RedeSocial.Web.Models.Post;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RedeSocial.Web.ApiServices.Account
@@ -17,6 +18,8 @@ namespace RedeSocial.Web.ApiServices.Account
         Task<IdentityResult> UpdateAsync(PerfilEditViewModel user);
 
         void AuthenticationHeader(string token);
+
+        Task<List<PostViewModel>> GetPostByAccountAsync(Guid id);
 
         Task<IdentityResult> CreatePostAsync(Guid id, PostCreateViewModel post);
         //Task<IdentityResult> EditPostAsync(PostCreateViewModel post);

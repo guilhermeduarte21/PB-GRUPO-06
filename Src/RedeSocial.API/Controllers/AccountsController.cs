@@ -8,6 +8,7 @@ using RedeSocial.Domain.Account;
 using RedeSocial.Domain.Post;
 using RedeSocial.Services.Account;
 using RedeSocial.Services.Post;
+using AutoMapper;
 
 namespace RedeSocial.API.Controllers
 {
@@ -18,12 +19,15 @@ namespace RedeSocial.API.Controllers
         private readonly IAccountService _accountService;
         private readonly IAccountIdentityManager _accountIdentityManager;
         private readonly IPostService _postService;
+        private readonly IMapper _mapper;
 
-        public AccountsController(IAccountService accountService, IAccountIdentityManager accountIdentityManager, IPostService postService)
+        public AccountsController(IAccountService accountService, IAccountIdentityManager accountIdentityManager, IPostService postService,
+                                    IMapper mapper)
         {
             this._accountService = accountService;
             this._accountIdentityManager = accountIdentityManager;
             this._postService = postService;
+            this._mapper = mapper;
         }
 
         #region API ACCOUNT
@@ -118,10 +122,14 @@ namespace RedeSocial.API.Controllers
         {
             var account = _accountService.FindByIdAsync(id.ToString(), default);
 
-            if (account == null)
+            if (account.Result == null)
                 return NotFound();
 
-            return Ok(account.Result.IDs_Postagens);
+            var postagens = _postService.GetPostByAccountAsync(id, default);
+
+            var response = _mapper.Map<List<PostagemResponse>>(postagens.Result);
+
+            return Ok(response);
         }
 
         [HttpPost("{id}/posts")]

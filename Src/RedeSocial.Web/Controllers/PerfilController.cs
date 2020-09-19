@@ -25,6 +25,8 @@ namespace RedeSocial.Web.Controllers
         {
             var response = await _accountApi.FindByUserNameAsync(UserName);
 
+            response.IDs_Postagens = await _accountApi.GetPostByAccountAsync(response.ID);
+
             return View(response);
         }
 

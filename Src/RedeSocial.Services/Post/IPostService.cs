@@ -25,5 +25,6 @@ namespace RedeSocial.Services.Post
         Task<Domain.Account.Account> GetID_AccountAsync(Postagem user, CancellationToken cancellationToken);
         Task<IList<Comentario>> GetIDs_ComentariosAsync(Postagem user, CancellationToken cancellationToken);
         Task<IEnumerable<Postagem>> GetPostsAsync();
+        Task<IList<Postagem>> GetPostByAccountAsync(Guid id, CancellationToken cancellationToken);
     }
 }

@@ -4,6 +4,7 @@ using RedeSocial.Web.Models.Account;
 using RedeSocial.Web.Models.Perfil;
 using RedeSocial.Web.Models.Post;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -140,6 +141,24 @@ namespace RedeSocial.Web.ApiServices.Account
         public async Task Logout()
         {
             await _httpClient.GetAsync("accounts/logout");
+        }
+
+        public async Task<List<PostViewModel>> GetPostByAccountAsync(Guid id)
+        {
+            var response = await _httpClient.GetAsync("accounts/" + id + "/posts");
+
+            List<PostViewModel> listPostViewModel = null;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                listPostViewModel = JsonConvert.DeserializeObject<List<PostViewModel>>(content);
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return listPostViewModel;
         }
     }
 }

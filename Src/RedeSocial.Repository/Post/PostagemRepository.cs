@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace RedeSocial.Repository.Post
 {
@@ -124,6 +125,13 @@ namespace RedeSocial.Repository.Post
         {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<IList<Postagem>> GetPostByAccountAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var list = this.Context.Postagens.Where(x => x.ID_Account.ID == id).ToList();
+
+            return await Task.FromResult(list);
         }
     }
 }

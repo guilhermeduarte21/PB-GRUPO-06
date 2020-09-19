@@ -20,6 +20,7 @@ using RedeSocial.Repository.Context;
 using RedeSocial.Web.ApiServices.Account;
 using RedeSocial.Services.Authenticate;
 using RedeSocial.Services.Post;
+using AutoMapper;
 
 namespace RedeSocial.Web
 {
@@ -47,6 +48,8 @@ namespace RedeSocial.Web
             services.AddTransient<IRoleStore<Role>, RoleRepository>();
 
             services.AddTransient<IAccountApi, AccountApi>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddDbContext<RedeSocialContext>(opt =>
             {
