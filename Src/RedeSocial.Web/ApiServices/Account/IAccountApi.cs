@@ -13,9 +13,11 @@ namespace RedeSocial.Web.ApiServices.Account
         Task<string> LoginAsync(LoginViewModel loginRequest);
         Task<IdentityResult> CreateAccountAsync(RegisterViewModel user);
         Task<AccountViewModel> FindByUserNameAsync(string userName);
+        Task<AccountViewModel> FindByIDAsync(string id);
 
         Task<PerfilEditViewModel> GetPerfilToUpdate(string userName);
-        Task<IdentityResult> UpdateAsync(PerfilEditViewModel user);
+        Task<IdentityResult> UpdatePerfilAsync(PerfilEditViewModel user);
+        Task<IdentityResult> UpdateAccountAsync(AccountViewModel user);
 
         void AuthenticationHeader(string token);
 

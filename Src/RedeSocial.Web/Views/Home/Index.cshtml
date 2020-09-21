@@ -143,7 +143,11 @@
                                         <div class="h7 text-muted">@item.Nome @item.SobreNome</div>
 
                                         <div>
-                                            <a asp-action="" class="card-link">Seguir</a>
+                                            <form class="form-inline" asp-action="Index" method="get">
+                                                <button name="id" value=" @item.ID" class="btn btn-outline-primary" type="submit">
+                                                    Seguir
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

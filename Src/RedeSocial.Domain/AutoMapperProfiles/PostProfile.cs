@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
+using RedeSocial.Domain.Account;
 using RedeSocial.Domain.Post;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RedeSocial.Domain.AutoMapperProfiles
 {
@@ -11,7 +9,7 @@ namespace RedeSocial.Domain.AutoMapperProfiles
         public PostProfile()
         {
             CreateMap<Postagem, PostagemResponse>();
-            CreateMap<Account.Account, Account.AccountSimplesResponse>();
+            CreateMap<Account.Account, AccountSimplesResponse>();
         }
     }
 }

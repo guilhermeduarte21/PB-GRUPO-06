@@ -60,7 +60,7 @@ namespace RedeSocial.Web.Controllers
                 perfil.DataNascimento = datanascimento;
                 perfil.FotoPerfilUrl = UrlImgame;
 
-                await _accountApi.UpdateAsync(perfil);
+                await _accountApi.UpdatePerfilAsync(perfil);
 
                 return RedirectToAction(nameof(Index));
             }

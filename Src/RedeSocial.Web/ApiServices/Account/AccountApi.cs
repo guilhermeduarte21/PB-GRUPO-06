@@ -58,6 +58,24 @@ namespace RedeSocial.Web.ApiServices.Account
             return accountViewModel;
         }
 
+        public async Task<AccountViewModel> FindByIDAsync(string id)
+        {
+            var response = await _httpClient.GetAsync("accounts/getid/" + id);
+
+            AccountViewModel accountViewModel = null;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                accountViewModel = JsonConvert.DeserializeObject<AccountViewModel>(content);
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return accountViewModel;
+        }
+
         public async Task<PerfilEditViewModel> GetPerfilToUpdate(string userName)
         {
             var response = await _httpClient.GetAsync("accounts/" + userName);
@@ -83,6 +101,7 @@ namespace RedeSocial.Web.ApiServices.Account
             var conteudo = new StringContent(loginRequestJson, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync("Authenticates/Token", conteudo);
+
             var customerJsonString = await response.Content.ReadAsStringAsync();
             var deserialized = JsonConvert.DeserializeObject<TokenResult>(custome‌​rJsonString);
 
@@ -96,7 +115,22 @@ namespace RedeSocial.Web.ApiServices.Account
             return null;
         }
 
-        public async Task<IdentityResult> UpdateAsync(PerfilEditViewModel user)
+        public async Task<IdentityResult> UpdatePerfilAsync(PerfilEditViewModel user)
+        {
+            var userJson = JsonConvert.SerializeObject(user);
+
+            var conteudo = new StringContent(userJson, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync("accounts/" + user.ID, conteudo);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return IdentityResult.Success;
+            }
+
+            return IdentityResult.Failed();
+        }
+        public async Task<IdentityResult> UpdateAccountAsync(AccountViewModel user)
         {
             var userJson = JsonConvert.SerializeObject(user);
 

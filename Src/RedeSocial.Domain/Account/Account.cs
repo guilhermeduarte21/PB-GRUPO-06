@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using RedeSocial.Domain.Post;
@@ -9,6 +10,7 @@ namespace RedeSocial.Domain.Account
 {
     public class Account
     {
+        [Key]
         public Guid ID { get; set; }
         public string UserName { get; set; }
         public String Email { get; set; }       

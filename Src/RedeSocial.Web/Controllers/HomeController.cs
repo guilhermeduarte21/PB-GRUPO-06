@@ -4,15 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.UI.V3.Pages.Internal.Account;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Logging;
 using RedeSocial.CrossCutting.UploadImg;
 using RedeSocial.Services.Account;
 using RedeSocial.Web.ApiServices.Account;
 using RedeSocial.Web.Models;
 using RedeSocial.Web.Models.Post;
+using AutoMapper;
+using RedeSocial.Domain.Account;
+using RedeSocial.Web.Models.Account;
 
 namespace RedeSocial.Web.Controllers
 {
@@ -22,22 +23,24 @@ namespace RedeSocial.Web.Controllers
         private readonly IAccountApi _accountApi;
         private readonly ILogger<HomeController> _logger;
         private readonly IAccountIdentityManager _accountIdentityManager;
-        public string UserName => this.User.Identity.Name;
+        private readonly IMapper _mapper;
+        public string _userName => this.User.Identity.Name;
 
-        public HomeController(ILogger<HomeController> logger, IAccountApi accountApi, IAccountIdentityManager accountIdentityManager)
+        public HomeController(ILogger<HomeController> logger, IAccountApi accountApi, IAccountIdentityManager accountIdentityManager, IMapper mapper)
         {
             _logger = logger;
             _accountApi = accountApi;
             _accountIdentityManager = accountIdentityManager;
+            this._mapper = mapper;
         }
 
-        public async Task<IActionResult> Index(string busca)
+        public async Task<IActionResult> Index(string busca, string id)
         {
-            var accountResponse = await _accountApi.FindByUserNameAsync(UserName);
-            
-            var list = await _accountApi.GetPostByAccountAsync(accountResponse.ID);
+            var accountLogada = await _accountApi.FindByUserNameAsync(_userName);
 
-            foreach(var item in accountResponse.IDs_Seguindo)
+            var list = await _accountApi.GetPostByAccountAsync(accountLogada.ID);
+
+            foreach(var item in accountLogada.IDs_Seguindo)
             {
                 var listPostSeguindo = await _accountApi.GetPostByAccountAsync(item.ID);
 
@@ -45,16 +48,40 @@ namespace RedeSocial.Web.Controllers
             }
 
             var listSorted = list.OrderByDescending(x => x.DataPostagem).ToList();
-            accountResponse.IDs_Postagens = listSorted;
+            accountLogada.IDs_Postagens = listSorted;
 
             if (!String.IsNullOrEmpty(busca))
             {
                 var buscaResponse = await _accountApi.GetFindAccountsAsync(busca);
-                accountResponse.Accounts_Busca.AddRange(buscaResponse);
+                accountLogada.Accounts_Busca.AddRange(buscaResponse);
+            }
+
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var accountAlguem = await _accountApi.FindByIDAsync(id);
+
+
+                accountAlguem.IDs_Seguidores.Add(new AccountSimplesResponse 
+                { 
+                    ID = accountLogada.ID,
+                    Nome = accountLogada.Nome,
+                    UserName = accountLogada.UserName
+                });
+
+                accountLogada.IDs_Seguindo.Add(new AccountSimplesResponse
+                {
+                    ID = accountAlguem.ID,
+                    Nome = accountAlguem.Nome,
+                    UserName = accountAlguem.UserName
+                });
+
+                await _accountApi.UpdateAccountAsync(accountAlguem);
+
+                await _accountApi.UpdateAccountAsync(accountLogada);
             }
 
 
-            return View(accountResponse);
+            return View(accountLogada);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -90,7 +117,7 @@ namespace RedeSocial.Web.Controllers
                         FotoPostUrl = urlImg
                     };
 
-                    var account = await _accountApi.FindByUserNameAsync(UserName);
+                    var account = await _accountApi.FindByUserNameAsync(_userName);
 
                     var response = await _accountApi.CreatePostAsync(account.ID, post);
 

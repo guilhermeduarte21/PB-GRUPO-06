@@ -6,8 +6,6 @@ using RedeSocial.Repository.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -89,6 +87,7 @@ namespace RedeSocial.Repository.Account
         {
             var accountToUpdate = await this.Context.Accounts.AsNoTracking().FirstOrDefaultAsync(x => x.ID == user.ID);
             accountToUpdate = user;
+
             this.Context.Entry(accountToUpdate).State = EntityState.Modified;
             this.Context.Accounts.Add(accountToUpdate);
             await this.Context.SaveChangesAsync();

@@ -52,6 +52,18 @@ namespace RedeSocial.API.Controllers
 
             return Ok(account);
         }
+        [HttpGet("getid/{id}")]
+        public async Task<ActionResult<Account>> GetAccount(Guid id)
+        {
+            var account = await _accountService.FindByIdAsync(id.ToString(), default);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(account);
+        }
         [HttpGet("pesquisa/{name}")]
         public ActionResult GetAccountByName(string name)
         {

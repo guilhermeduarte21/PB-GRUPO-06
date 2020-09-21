@@ -1,5 +1,4 @@
 ﻿using RedeSocial.Domain.Account;
-using RedeSocial.Domain.Post;
 using RedeSocial.Web.Models.Post;
 using System;
 using System.Collections.Generic;
@@ -21,8 +20,8 @@ namespace RedeSocial.Web.Models.Account
         public virtual Role ID_Role { get; set; }
 
 
-        public virtual IList<Domain.Account.Account> IDs_Seguidores { get; set; }
-        public virtual IList<Domain.Account.Account> IDs_Seguindo { get; set; }
+        public virtual IList<AccountSimplesResponse> IDs_Seguidores { get; set; } = new List<AccountSimplesResponse>();
+        public virtual IList<AccountSimplesResponse> IDs_Seguindo { get; set; } = new List<AccountSimplesResponse>();
         public virtual List<PostViewModel> IDs_Postagens { get; set; } = new List<PostViewModel>();
         public virtual List<AccountSimplesViewModel> Accounts_Busca { get; set; } = new List<AccountSimplesViewModel>();
     }
